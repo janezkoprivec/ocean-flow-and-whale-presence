@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ocean Flow & Whale Presence</title>
+
+  <!-- prevent favicon 404 -->
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+  <!-- project styles -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- MapTiler SDK (for globe + map) -->
+  <script src="https://cdn.jsdelivr.net/npm/@maptiler/sdk@1.0.0/dist/maptiler-sdk.umd.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/@maptiler/sdk@1.0.0/dist/maptiler-sdk.css" rel="stylesheet" />
+
+  <script>
+    maptilersdk.config.apiKey = "j72DJvKfg99jStOjT7xE";
+  </script>
+
+<!-- d3 -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <!-- 🔧 Layout + globe visibility fixes -->
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #0b1020; /* dark background helps globe perception */
+    }
+
+    /* allow main.layout to grow to fill the remaining viewport below the header */
+    main.layout {
+      flex: 1 1 auto;
+      display: grid; /* keep grid behavior from stylesheet */
+    }
+
+    .content {
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    #map.map {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #0b1020;
+      z-index: 0;
+    }
+
+    #map .maplibregl-canvas {
+      outline: none;
+    }
+
+    .maplibregl-control-container {
+      z-index: 2;
+    }
+
+    .overlay-title {
+      position: static;
+      display: block;
+      width: 100%;
+      color: #fff;
+      font-size: 2.5rem;
+      font-weight: bold;
+      text-shadow: 0 2px 8px #000, 0 0 1px #000;
+      pointer-events: none;
+      margin: 32px 0 16px 32px;
+      padding: 0;
+      text-align: left;
+      z-index: 10;
+    }
+    body, html {
+      /* ensure relative positioning for overlay */
+      position: relative;
+    }
+  </style>
+</head>
+
+<script>
+  console.log("✅ inline script runs");
+</script>
+
+<body>
+  <h1 class="overlay-title">Ocean Flow & Whale Presence</h1>
+
+  <main id="explore" class="layout">
+    <aside class="panel">
+      <h2>Filters</h2>
+
+      <label class="field">
+        Dataset range
+        <select id="rangeSelect">
+          <option value="2011_2012" selected>2011–2012 (aligned with ECCO)</option>
+          <option value="2010_2013">2010–2013 (OBIS full)</option>
+        </select>
+      </label>
+
+      <label class="field">
+        Species
+        <select id="speciesSelect"></select>
+      </label>
+
+      <div class="field">
+        <div class="row">
+          <span>Time</span>
+          <span id="timeLabel" class="muted"></span>
+        </div>
+        <input id="timeSlider" type="range" min="0" max="23" step="1" value="0">
+        <div class="row tiny muted">
+          <span>Start</span><span>End</span>
+        </div>
+        <button id="playBtn" class="btn small">Play</button>
+      </div>
+
+      <div class="field">
+        <strong>Layers</strong>
+        <label class="check">
+          <input type="checkbox" id="whalesToggle" checked> Whales
+        </label>
+        <label class="check">
+          <input type="checkbox" id="currentsToggle" checked> Vertical flow (w)
+        </label>
+      </div>
+
+      <div class="field">
+        <strong>Bookmarks</strong>
+        <div class="bookmarks">
+          <button data-bm="med" class="chip">Mediterranean</button>
+          <button data-bm="biscay" class="chip">Bay of Biscay</button>
+          <button data-bm="norway" class="chip">Norwegian Sea</button>
+          <button data-bm="northsea" class="chip">North Sea</button>
+          <button data-bm="iceland" class="chip">Iceland</button>
+        </div>
+      </div>
+
+      <p class="note">
+        Note: OBIS observations are presence records (not tracked individuals). Currents data may cover a narrower time span.<br>
+        Note: w &gt; 0 indicates upward motion (upwelling), w &lt; 0 downward motion (downwelling).
+      </p>
+
+      <div class="charts">
+        <section class="card">
+          <h3>Seasonality (monthly presence)</h3>
+          <div id="seasonality"></div>
+        </section>
+
+        <section class="card">
+          <h3>Top species (current filter)</h3>
+          <div id="speciesChart"></div>
+        </section>
+      </div>
+    </aside>
+
+    <section class="content">
+      <div id="map" class="map"></div>
+    </section>
+  </main>
+
+  <!-- ✅ app entry point: must be a module -->
+  <script type="module" src="src/main.js"></script>
+
+  <!-- add: load local whales GeoJSON into the map and populate species dropdown -->
+  <script>
+  (function(){
+    function findMap() {
+      const candidates = [window.map, window.Map, window._map, window._mbMap];
+      for (const c of candidates) if (c && typeof c.addSource === 'function') return c;
+      for (const k in window) {
+        try {
+          const v = window[k];
+          if (v && typeof v.addSource === 'function' && typeof v.on === 'function') return v;
+        } catch (e) {}
+      }
+      return null;
+    }
+
+    async function fetchData() {
+      const tries = [
+        'data/whales.geojson',
+        'data/whales.json',
+        '/data/whales.geojson',
+        '/data/whales.json'
+      ];
+      for (const url of tries) {
+        try {
+          const res = await fetch(url);
+          if (res && res.ok) return await res.json();
+        } catch (e){}
+      }
+      return null;
+    }
+
+    async function addWhales() {
+      const map = findMap();
+      if (!map) return setTimeout(addWhales, 250);
+
+      if (map.getSource && map.getSource('whales')) return; // already added
+
+      const data = await fetchData();
+      if (!data || !data.features || !data.features.length) {
+        console.debug('whales: no local GeoJSON found or empty');
+        return;
+      }
+
+      try {
+        map.addSource('whales', { type: 'geojson', data });
+      } catch (e) {
+        console.debug('whales: addSource failed', e);
+        return;
+      }
+
+      try {
+        map.addLayer({
+          id: 'whales',
+          type: 'circle',
+          source: 'whales',
+          paint: {
+            'circle-radius': 4,
+            'circle-color': '#ff7f50',
+            'circle-stroke-color': '#000',
+            'circle-stroke-width': 0.6,
+            'circle-opacity': 0.95
+          }
+        });
+      } catch (e) {
+        console.debug('whales: addLayer failed', e);
+      }
+
+      // populate species dropdown
+      try {
+        const sel = document.getElementById('speciesSelect');
+        if (sel) {
+          const speciesSet = new Set();
+          data.features.forEach(f => {
+            const p = f.properties && (
+              f.properties.species ||
+              f.properties.species_name ||
+              f.properties.spec ||
+              f.properties.scientificName ||
+              f.properties.commonName
+            );
+            if (p) speciesSet.add(String(p));
+          });
+          // clear existing options and add a default "All"
+          sel.innerHTML = '<option value="">All species</option>';
+          Array.from(speciesSet).sort().forEach(sp => {
+            const opt = document.createElement('option');
+            opt.value = sp;
+            opt.textContent = sp;
+            sel.appendChild(opt);
+          });
+        }
+      } catch (e) { /* ignore UI fill errors */ }
+    }
+
+    // try to add after the map is initialised and whenever style/data changes
+    function init() {
+      const map = findMap();
+      if (!map) return setTimeout(init, 250);
+      addWhales();
+      if (map.on) {
+        map.on('styledata', addWhales);
+        map.on('data', addWhales);
+      }
+    }
+
+    init();
+  })();
+  </script>
+
+  <!-- replace: color map points by species (hardened) -->
+  <script>
+  (function(){
+    function findMap() {
+      const candidates = [window.map, window.Map, window._map, window._mbMap];
+      for (const c of candidates) if (c && typeof c.getLayer === 'function') return c;
+      for (const k in window) {
+        try {
+          const v = window[k];
+          if (v && typeof v.getLayer === 'function' && typeof v.on === 'function') return v;
+        } catch(e){}
+      }
+      return null;
+    }
+
+    function hashColor(str){
+      let h=0; for (let i=0;i<str.length;i++) h=(h<<5)-h+str.charCodeAt(i)|0;
+      const hue = Math.abs(h)%360; const s=65,l=55;
+      const c = (1 - Math.abs(2*(l/100)-1))*(s/100);
+      const x = c*(1 - Math.abs((hue/60)%2 - 1));
+      const m = (l/100) - c/2;
+      let r=0,g=0,b=0;
+      if (hue<60){r=c;g=x}
+      else if (hue<120){r=x;g=c}
+      else if (hue<180){g=c;b=x}
+      else if (hue<240){g=x;b=c}
+      else if (hue<300){r=x;b=c}
+      else {r=c;b=x}
+      const R=Math.round((r+m)*255), G=Math.round((g+m)*255), B=Math.round((b+m)*255);
+      return '#' + [R,G,B].map(v=>v.toString(16).padStart(2,'0')).join('');
+    }
+
+    function applySpeciesColors(map){
+      if (!map || !map.getStyle) return;
+      const layerCandidates = ['whales','whale-points','observations','species-points','points','markers'];
+      let targetLayerId = null;
+      for (const id of layerCandidates) if (map.getLayer && map.getLayer(id)) { targetLayerId = id; break; }
+      if (!targetLayerId) {
+        const styleLayers = (map.getStyle && map.getStyle().layers) || [];
+        for (const lyr of styleLayers) {
+          if (lyr.type === 'circle') { targetLayerId = lyr.id; break; }
+        }
+        if (!targetLayerId) {
+          console.debug('species-color: no candidate circle layer found');
+          return;
+        }
+      }
+
+      let features = [];
+      try { features = map.queryRenderedFeatures({layers:[targetLayerId]}) || []; } catch(e){ features = []; }
+      const speciesSet = new Set();
+      features.forEach(f => {
+        const p = f.properties && (f.properties.species || f.properties.species_name || f.properties.spec || f.properties.scientificName || f.properties.commonName);
+        if (p) speciesSet.add(String(p));
+      });
+
+      // fallback: use options in speciesSelect
+      if (speciesSet.size === 0) {
+        const sel = document.getElementById('speciesSelect');
+        if (sel) for (const opt of sel.options) if (opt.value) speciesSet.add(opt.value);
+      }
+
+      if (speciesSet.size === 0) {
+        console.debug('species-color: no species found to render');
+        return;
+      }
+
+      const markerPrefix = targetLayerId + '-by-species-';
+      const already = (map.getStyle().layers || []).some(l => l.id && l.id.startsWith(markerPrefix));
+      if (already) return;
+
+      const original = map.getLayer(targetLayerId);
+      const source = original && original.source;
+      const sourceLayer = original && original['source-layer'];
+
+      const speciesList = Array.from(speciesSet).sort();
+      const added = [];
+      speciesList.forEach((sp, idx) => {
+        const id = markerPrefix + idx;
+        const layerDef = {
+          id,
+          type: 'circle',
+          source: source,
+          paint: {
+            'circle-radius': 4,
+            'circle-color': hashColor(sp),
+            'circle-stroke-color': '#000',
+            'circle-stroke-width': 0.5,
+            'circle-opacity': 0.95
+          },
+          filter: ['any',
+            ['==', ['get', 'species'], sp],
+            ['==', ['get', 'species_name'], sp],
+            ['==', ['get', 'spec'], sp],
+            ['==', ['get', 'scientificName'], sp],
+            ['==', ['get', 'commonName'], sp]
+          ]
+        };
+        if (sourceLayer) layerDef['source-layer'] = sourceLayer;
+        try {
+          map.addLayer(layerDef);
+          added.push(id);
+        } catch(e){
+          // ignore individual add errors
+        }
+      });
+
+      if (added.length > 0) {
+        try { map.setLayoutProperty(targetLayerId, 'visibility', 'none'); } catch(e){}
+        console.debug('species-color: added', added.length, 'layers for species');
+      } else {
+        // cleanup any partial adds
+        (map.getStyle().layers || []).forEach(l => {
+          if (l.id && l.id.startsWith(markerPrefix)) {
+            try { map.removeLayer(l.id); } catch(e) {}
+          }
+        });
+        console.debug('species-color: no layers added (no matching property); original layer left visible');
+      }
+    }
+
+    function initOnce(){
+      const map = findMap();
+      if (!map) return setTimeout(initOnce, 250);
+      const tryApply = () => applySpeciesColors(map);
+      try {
+        if (map.on) {
+          map.on('idle', tryApply);
+          map.on('data', tryApply);
+          map.on('styledata', tryApply);
+        }
+        tryApply();
+      } catch(e){
+        setTimeout(tryApply, 500);
+      }
+    }
+
+    initOnce();
+  })();
+  </script>
+
+  <!-- ADD: Filtering logic for whales and charts -->
+  <script>
+  (function() {
+    let whalesData = null;
+    let filteredData = null;
+    let map = null;
+
+    // Helper: get current filter values
+    function getFilters() {
+      return {
+        range: document.getElementById('rangeSelect').value,
+        species: document.getElementById('speciesSelect').value,
+        time: +document.getElementById('timeSlider').value
+      };
+    }
+
+    // Helper: filter whales data
+    function filterWhalesData() {
+      if (!whalesData) return null;
+      const { range, species, time } = getFilters();
+      // Example property names, adjust as needed
+      return {
+        ...whalesData,
+        features: whalesData.features.filter(f => {
+          const p = f.properties || {};
+          // Range filter: example assumes a 'year' property
+          let inRange = true;
+          if (range === '2011_2012') inRange = (p.year >= 2011 && p.year <= 2012);
+          if (range === '2010_2013') inRange = (p.year >= 2010 && p.year <= 2013);
+          // Species filter
+          let speciesMatch = !species || [p.species, p.species_name, p.spec, p.scientificName, p.commonName].includes(species);
+          // Time filter: example assumes 'hour' property (0-23)
+          let timeMatch = (typeof p.hour === 'undefined') || (p.hour === time);
+          return inRange && speciesMatch && timeMatch;
+        })
+      };
+    }
+
+    // Update map source with filtered data
+    function updateMap() {
+      if (!map || !whalesData) return;
+      filteredData = filterWhalesData();
+      try {
+        const src = map.getSource('whales');
+        if (src && filteredData) src.setData(filteredData);
+      } catch(e){}
+    }
+
+    // Update charts (placeholder)
+    function updateCharts() {
+      // Example: update #seasonality and #speciesChart
+      const seasonality = document.getElementById('seasonality');
+      const speciesChart = document.getElementById('speciesChart');
+      if (!filteredData) return;
+      // Seasonality: count by month (assumes 'month' property)
+      const monthCounts = Array(12).fill(0);
+      filteredData.features.forEach(f => {
+        const m = (f.properties && f.properties.month) || 0;
+        if (m >= 1 && m <= 12) monthCounts[m-1]++;
+      });
+      seasonality.innerHTML = '<div>' + monthCounts.map((c,i)=>`<span>${i+1}: ${c}</span>`).join(' ') + '</div>';
+      // Species chart: count by species
+      const speciesCounts = {};
+      filteredData.features.forEach(f => {
+        const s = f.properties && (f.properties.species || f.properties.species_name || f.properties.spec || f.properties.scientificName || f.properties.commonName) || 'Unknown';
+        speciesCounts[s] = (speciesCounts[s]||0)+1;
+      });
+      speciesChart.innerHTML = '<div>' + Object.entries(speciesCounts).map(([s,c])=>`<span>${s}: ${c}</span>`).join('<br>') + '</div>';
+    }
+
+    // On filter change
+    function onFilterChange() {
+      updateMap();
+      updateCharts();
+    }
+
+    // Wait for whales data and map to be ready
+    function tryInit() {
+      // Find map
+      map = (function(){
+        const candidates = [window.map, window.Map, window._map, window._mbMap];
+        for (const c of candidates) if (c && typeof c.getSource === 'function') return c;
+        for (const k in window) {
+          try {
+            const v = window[k];
+            if (v && typeof v.getSource === 'function' && typeof v.on === 'function') return v;
+          } catch(e){}
+        }
+        return null;
+      })();
+      // Get whales data from map source
+      try {
+        const src = map && map.getSource && map.getSource('whales');
+        if (src && src._data) whalesData = src._data;
+      } catch(e){}
+      if (!map || !whalesData) return setTimeout(tryInit, 250);
+
+      // Listen to filter controls
+      ['rangeSelect','speciesSelect','timeSlider'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('change', onFilterChange);
+        if (el && id === 'timeSlider') el.addEventListener('input', onFilterChange);
+      });
+
+      // Initial update
+      onFilterChange();
+    }
+
+    // Wait for DOM and map/data
+    window.addEventListener('DOMContentLoaded', () => setTimeout(tryInit, 500));
+  })();
+  </script>
+</body>
+</html>
