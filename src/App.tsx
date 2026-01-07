@@ -6,6 +6,7 @@ import {
   AppShell,
   Badge,
   Button,
+  Container,
   Divider,
   Group,
   MantineProvider,
@@ -22,6 +23,11 @@ import {
 import { LineChart, BarChart } from "@mantine/charts";
 import * as maptilersdk from "@maptiler/sdk";
 import { theme } from "./theme";
+import WhaleGuessingGame from "./components/WhaleGuessingGame";
+import WhalesSalinityTemp from "./components/WhalesSalinityTemp";
+import StatsBySpecies from "./components/StatsBySpecies";
+import WhalePresenceGame from "./components/WhalePresenceGame";
+import ExploreTheOceans from "./components/ExploreTheOceans";
 
 type WhaleFeature = {
   type: "Feature";
@@ -315,163 +321,173 @@ export default function App() {
 
   return (
     <MantineProvider theme={theme} defaultColorScheme="dark">
-      <AppShell padding="md">
-        <AppShell.Header style={{ background: "transparent", borderBottom: "none" }}>
-          <Stack gap={4} p="md">
-            <Title order={2}>Ocean Flow &amp; Whale Presence</Title>
-            <Text c="dimmed" size="sm">
-              Explore observed whale presence, seasonality, and vertical flow (w) currents.
-            </Text>
-          </Stack>
-        </AppShell.Header>
-        <AppShell.Main>
-          <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md">
-            <Stack>
-              <Paper withBorder p="md" radius="lg">
-                <Stack gap="md">
-                  <Group justify="space-between">
-                    <Title order={4}>Filters</Title>
-                    <Badge variant="light" color="blue">
-                      {formatMonth(monthIndex)}
-                    </Badge>
-                  </Group>
-                  <Select
-                    label="Dataset range"
-                    data={[
-                      { value: "2011_2012", label: "2011–2012 (aligned with ECCO)" },
-                      { value: "2010_2013", label: "2010–2013 (OBIS full)" }
-                    ]}
-                    value={range}
-                    onChange={value => {
-                      if (value === "2011_2012" || value === "2010_2013") setRange(value);
-                    }}
-                  />
-                  <Select
-                    label="Species"
-                    placeholder="All species"
-                    data={speciesOptions.map(s => ({ value: s, label: s }))}
-                    value={species === "All" ? null : species}
-                    onChange={value => setSpecies(value ?? "All")}
-                    searchable
-                    clearable
-                  />
-                  <Stack gap={6}>
-                    <Group justify="space-between">
-                      <Text fw={500}>Time</Text>
-                      <Text size="sm" c="dimmed">
-                        {formatMonth(monthIndex)}
-                      </Text>
-                    </Group>
-                    <Slider
-                      value={monthIndex}
-                      onChange={setMonthIndex}
-                      min={0}
-                      max={MONTH_COUNT - 1}
-                      step={1}
-                      marks={[
-                        { value: 0, label: "Start" },
-                        { value: MONTH_COUNT - 1, label: "End" }
-                      ]}
-                    />
-                    <Group gap="sm">
-                      <Button size="xs" variant="light" onClick={() => setPlaying(p => !p)}>
-                        {playing ? "Pause" : "Play"}
-                      </Button>
-                      <Text size="xs" c="dimmed">
-                        Animates month +/-1 window for whale presence
-                      </Text>
-                    </Group>
-                  </Stack>
-                  <Divider />
-                  <Stack gap="xs">
-                    <Text fw={500}>Layers</Text>
-                    <Switch
-                      checked={showWhales}
-                      label="Whales"
-                      onChange={e => setShowWhales(e.currentTarget.checked)}
-                    />
-                    <Switch
-                      checked={showCurrents}
-                      label="Vertical flow (w)"
-                      onChange={e => setShowCurrents(e.currentTarget.checked)}
-                    />
-                  </Stack>
-                  <Divider />
-                  <Stack gap="xs">
-                    <Text fw={500}>Bookmarks</Text>
-                    <Group gap="xs">
-                      {Object.entries(bookmarks).map(([key, val]) => (
-                        <Button
-                          key={key}
-                          size="xs"
-                          variant="outline"
-                          onClick={() => {
-                            if (!mapRef.current) return;
-                            mapRef.current.flyTo({ center: val.center, zoom: val.zoom, speed: 0.7 });
-                          }}
-                        >
-                          {key === "med" && "Mediterranean"}
-                          {key === "biscay" && "Bay of Biscay"}
-                          {key === "norway" && "Norwegian Sea"}
-                          {key === "northsea" && "North Sea"}
-                          {key === "iceland" && "Iceland"}
-                        </Button>
-                      ))}
-                    </Group>
-                  </Stack>
-                  <Divider />
-                  <Text size="sm" c="dimmed">
-                    OBIS observations are presence records (not tracked individuals). w &gt; 0 indicates
-                    upwelling, w &lt; 0 downwelling. Currents data covers 2011–2012.
-                  </Text>
-                </Stack>
-              </Paper>
-
-              <SimpleGrid cols={1} spacing="md">
-                <Paper withBorder p="md" radius="lg">
-                  <Stack gap="sm">
-                    <Title order={5}>Seasonality (monthly presence)</Title>
-                    <LineChart
-                      h={220}
-                      data={seasonality}
-                      dataKey="label"
-                      series={[{ name: "count", color: "cyan" }]}
-                    />
-                  </Stack>
-                </Paper>
-
-                <Paper withBorder p="md" radius="lg">
-                  <Stack gap="sm">
-                    <Title order={5}>Top species (current filters)</Title>
-                    <BarChart
-                      h={240}
-                      data={speciesChart}
-                      dataKey="species"
-                      series={[{ name: "count", color: "blue.4" }]}
-                    />
-                  </Stack>
-                </Paper>
-              </SimpleGrid>
+      <Container size="xl" px="md" py="lg">
+        <AppShell padding="md">
+          <AppShell.Header style={{ background: "transparent", borderBottom: "none" }}>
+            <Stack gap={4} p="md">
+              <Title order={2}>Ocean Flow &amp; Whale Presence</Title>
+              <Text c="dimmed" size="sm">
+                Explore observed whale presence, seasonality, and vertical flow (w) currents.
+              </Text>
             </Stack>
+          </AppShell.Header>
+          <AppShell.Main>
+            <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md">
+              <Stack>
+                <Paper withBorder p="md" radius="lg">
+                  <Stack gap="md">
+                    <Group justify="space-between">
+                      <Title order={4}>Filters</Title>
+                      <Badge variant="light" color="blue">
+                        {formatMonth(monthIndex)}
+                      </Badge>
+                    </Group>
+                    <Select
+                      label="Dataset range"
+                      data={[
+                        { value: "2011_2012", label: "2011–2012 (aligned with ECCO)" },
+                        { value: "2010_2013", label: "2010–2013 (OBIS full)" }
+                      ]}
+                      value={range}
+                      onChange={value => {
+                        if (value === "2011_2012" || value === "2010_2013") setRange(value);
+                      }}
+                    />
+                    <Select
+                      label="Species"
+                      placeholder="All species"
+                      data={speciesOptions.map(s => ({ value: s, label: s }))}
+                      value={species === "All" ? null : species}
+                      onChange={value => setSpecies(value ?? "All")}
+                      searchable
+                      clearable
+                    />
+                    <Stack gap={6}>
+                      <Group justify="space-between">
+                        <Text fw={500}>Time</Text>
+                        <Text size="sm" c="dimmed">
+                          {formatMonth(monthIndex)}
+                        </Text>
+                      </Group>
+                      <Slider
+                        value={monthIndex}
+                        onChange={setMonthIndex}
+                        min={0}
+                        max={MONTH_COUNT - 1}
+                        step={1}
+                        marks={[
+                          { value: 0, label: "Start" },
+                          { value: MONTH_COUNT - 1, label: "End" }
+                        ]}
+                      />
+                      <Group gap="sm">
+                        <Button size="xs" variant="light" onClick={() => setPlaying(p => !p)}>
+                          {playing ? "Pause" : "Play"}
+                        </Button>
+                        <Text size="xs" c="dimmed">
+                          Animates month +/-1 window for whale presence
+                        </Text>
+                      </Group>
+                    </Stack>
+                    <Divider />
+                    <Stack gap="xs">
+                      <Text fw={500}>Layers</Text>
+                      <Switch
+                        checked={showWhales}
+                        label="Whales"
+                        onChange={e => setShowWhales(e.currentTarget.checked)}
+                      />
+                      <Switch
+                        checked={showCurrents}
+                        label="Vertical flow (w)"
+                        onChange={e => setShowCurrents(e.currentTarget.checked)}
+                      />
+                    </Stack>
+                    <Divider />
+                    <Stack gap="xs">
+                      <Text fw={500}>Bookmarks</Text>
+                      <Group gap="xs">
+                        {Object.entries(bookmarks).map(([key, val]) => (
+                          <Button
+                            key={key}
+                            size="xs"
+                            variant="outline"
+                            onClick={() => {
+                              if (!mapRef.current) return;
+                              mapRef.current.flyTo({ center: val.center, zoom: val.zoom, speed: 0.7 });
+                            }}
+                          >
+                            {key === "med" && "Mediterranean"}
+                            {key === "biscay" && "Bay of Biscay"}
+                            {key === "norway" && "Norwegian Sea"}
+                            {key === "northsea" && "North Sea"}
+                            {key === "iceland" && "Iceland"}
+                          </Button>
+                        ))}
+                      </Group>
+                    </Stack>
+                    <Divider />
+                    <Text size="sm" c="dimmed">
+                      OBIS observations are presence records (not tracked individuals). w &gt; 0 indicates
+                      upwelling, w &lt; 0 downwelling. Currents data covers 2011–2012.
+                    </Text>
+                  </Stack>
+                </Paper>
 
-            <Paper
-              withBorder
-              radius="lg"
-              p="sm"
-              style={{
-                background: theme.other?.mapBg ?? "#0b1020",
-                height: "calc(100vh - 180px)",
-                minHeight: rem(500)
-              }}
-            >
-              <div
-                ref={mapContainerRef}
-                style={{ width: "100%", height: "100%", borderRadius: rem(12), overflow: "hidden" }}
-              />
-            </Paper>
-          </SimpleGrid>
-        </AppShell.Main>
-      </AppShell>
+                <SimpleGrid cols={1} spacing="md">
+                  <Paper withBorder p="md" radius="lg">
+                    <Stack gap="sm">
+                      <Title order={5}>Seasonality (monthly presence)</Title>
+                      <LineChart
+                        h={220}
+                        data={seasonality}
+                        dataKey="label"
+                        series={[{ name: "count", color: "cyan" }]}
+                      />
+                    </Stack>
+                  </Paper>
+
+                  <Paper withBorder p="md" radius="lg">
+                    <Stack gap="sm">
+                      <Title order={5}>Top species (current filters)</Title>
+                      <BarChart
+                        h={240}
+                        data={speciesChart}
+                        dataKey="species"
+                        series={[{ name: "count", color: "blue.4" }]}
+                      />
+                    </Stack>
+                  </Paper>
+                </SimpleGrid>
+              </Stack>
+
+              <Paper
+                withBorder
+                radius="lg"
+                p="sm"
+                style={{
+                  background: theme.other?.mapBg ?? "#0b1020",
+                  height: "calc(100vh - 180px)",
+                  minHeight: rem(500)
+                }}
+              >
+                <div
+                  ref={mapContainerRef}
+                  style={{ width: "100%", height: "100%", borderRadius: rem(12), overflow: "hidden" }}
+                />
+              </Paper>
+            </SimpleGrid>
+          </AppShell.Main>
+        </AppShell>
+
+        <Stack mt="md" gap="md">
+          <WhaleGuessingGame />
+          <WhalesSalinityTemp />
+          <StatsBySpecies />
+          <WhalePresenceGame />
+          <ExploreTheOceans />
+        </Stack>
+      </Container>
     </MantineProvider>
   );
 }
