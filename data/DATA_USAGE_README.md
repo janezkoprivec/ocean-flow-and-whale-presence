@@ -6,7 +6,7 @@ This file contains all occurrences of the top 3 whale species in a single array.
 
 ## whales_2011_top3_by_species_month.json
 
-This file is used for the visualization where users can select a species they want to follow. The data is organized hierarchically by species and then by month.
+This file is used for the visualization where users can select a species they want to follow. The data is organized hierarchically by species and then by month. When computing mean value of temperature, +-1.0 degree was used for boundry box around the center (lat,lon) point of the whale. Using a larger value results in too broad of an area, and using too small of a value can cause noise to affect the reading of temperature for each whale.
 
 ### Structure
 
