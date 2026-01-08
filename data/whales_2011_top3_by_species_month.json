@@ -1,0 +1,1828 @@
+{
+  "Balaenoptera physalus": {
+    "january": {
+      "centroid": null,
+      "occurences": [],
+      "mean_temperature": "null",
+      "mean_salinity": "null"
+    },
+    "february": {
+      "centroid": {
+        "lon": 14.1004255,
+        "lat": 54.424407
+      },
+      "occurences": [
+        {
+          "lon": 12.070851,
+          "lat": 39.698814
+        },
+        {
+          "lon": 16.13,
+          "lat": 69.15
+        }
+      ],
+      "mean_temperature": {
+        "mean": 9.519434772512835,
+        "points_processed": 2,
+        "total_points": 2
+      },
+      "mean_salinity": {
+        "mean": 36.27052139476607,
+        "points_processed": 2,
+        "total_points": 2
+      }
+    },
+    "march": {
+      "centroid": {
+        "lon": 18.685,
+        "lat": 74.69
+      },
+      "occurences": [
+        {
+          "lon": 18.72,
+          "lat": 74.68
+        },
+        {
+          "lon": 18.65,
+          "lat": 74.7
+        }
+      ],
+      "mean_temperature": {
+        "mean": 0.5019784935105305,
+        "points_processed": 2,
+        "total_points": 2
+      },
+      "mean_salinity": {
+        "mean": 34.95798553026711,
+        "points_processed": 2,
+        "total_points": 2
+      }
+    },
+    "april": {
+      "centroid": {
+        "lon": 9.781983,
+        "lat": 41.122183
+      },
+      "occurences": [
+        {
+          "lon": 9.781983,
+          "lat": 41.122183
+        }
+      ],
+      "mean_temperature": {
+        "mean": 15.844513532352968,
+        "points_processed": 1,
+        "total_points": 1
+      },
+      "mean_salinity": {
+        "mean": 38.22497382366722,
+        "points_processed": 1,
+        "total_points": 1
+      }
+    },
+    "may": {
+      "centroid": null,
+      "occurences": [],
+      "mean_temperature": "null",
+      "mean_salinity": "null"
+    },
+    "june": {
+      "centroid": {
+        "lon": 10.0541735,
+        "lat": 58.54989833333334
+      },
+      "occurences": [
+        {
+          "lon": -4.86297,
+          "lat": 48.0388
+        },
+        {
+          "lon": 8.484177,
+          "lat": 44.1039
+        },
+        {
+          "lon": 7.833834,
+          "lat": 43.69669
+        },
+        {
+          "lon": 10.67,
+          "lat": 68.17
+        },
+        {
+          "lon": 20.33,
+          "lat": 73.62
+        },
+        {
+          "lon": 17.87,
+          "lat": 73.67
+        }
+      ],
+      "mean_temperature": {
+        "mean": 13.273808128401548,
+        "points_processed": 6,
+        "total_points": 6
+      },
+      "mean_salinity": {
+        "mean": 36.024420693018804,
+        "points_processed": 6,
+        "total_points": 6
+      }
+    },
+    "july": {
+      "centroid": {
+        "lon": 12.206566306122449,
+        "lat": 67.32535510204082
+      },
+      "occurences": [
+        {
+          "lon": 9.988017,
+          "lat": 41.08115
+        },
+        {
+          "lon": 8.248953,
+          "lat": 43.64053
+        },
+        {
+          "lon": 8.480103,
+          "lat": 43.32027
+        },
+        {
+          "lon": 7.827948,
+          "lat": 43.52881
+        },
+        {
+          "lon": 8.036902,
+          "lat": 43.69854
+        },
+        {
+          "lon": 8.444783,
+          "lat": 43.189
+        },
+        {
+          "lon": 7.695766,
+          "lat": 43.54433
+        },
+        {
+          "lon": 8.429981,
+          "lat": 43.16748
+        },
+        {
+          "lon": 8.498984,
+          "lat": 43.27523
+        },
+        {
+          "lon": 8.132725,
+          "lat": 43.39317
+        },
+        {
+          "lon": 8.047587,
+          "lat": 43.36389
+        },
+        {
+          "lon": 16.43,
+          "lat": 71.3
+        },
+        {
+          "lon": 9.78,
+          "lat": 72.97
+        },
+        {
+          "lon": 9.6,
+          "lat": 73.0
+        },
+        {
+          "lon": 9.63,
+          "lat": 73.0
+        },
+        {
+          "lon": 7.4,
+          "lat": 73.67
+        },
+        {
+          "lon": 18.87,
+          "lat": 73.87
+        },
+        {
+          "lon": 16.27,
+          "lat": 74.07
+        },
+        {
+          "lon": 15.33,
+          "lat": 74.15
+        },
+        {
+          "lon": 7.25,
+          "lat": 74.18
+        },
+        {
+          "lon": 15.23,
+          "lat": 74.28
+        },
+        {
+          "lon": 16.35,
+          "lat": 74.3
+        },
+        {
+          "lon": 7.23,
+          "lat": 74.3
+        },
+        {
+          "lon": 16.33,
+          "lat": 74.32
+        },
+        {
+          "lon": 16.45,
+          "lat": 74.35
+        },
+        {
+          "lon": 15.15,
+          "lat": 74.35
+        },
+        {
+          "lon": 15.15,
+          "lat": 74.35
+        },
+        {
+          "lon": 7.22,
+          "lat": 74.35
+        },
+        {
+          "lon": 15.17,
+          "lat": 74.37
+        },
+        {
+          "lon": 17.52,
+          "lat": 74.38
+        },
+        {
+          "lon": 7.22,
+          "lat": 74.38
+        },
+        {
+          "lon": 17.45,
+          "lat": 74.42
+        },
+        {
+          "lon": 17.52,
+          "lat": 74.55
+        },
+        {
+          "lon": 7.32,
+          "lat": 74.62
+        },
+        {
+          "lon": 7.32,
+          "lat": 74.62
+        },
+        {
+          "lon": 7.32,
+          "lat": 74.68
+        },
+        {
+          "lon": 16.42,
+          "lat": 74.78
+        },
+        {
+          "lon": 7.28,
+          "lat": 74.78
+        },
+        {
+          "lon": 16.37,
+          "lat": 74.8
+        },
+        {
+          "lon": 16.58,
+          "lat": 74.82
+        },
+        {
+          "lon": 7.22,
+          "lat": 74.82
+        },
+        {
+          "lon": 16.55,
+          "lat": 74.83
+        },
+        {
+          "lon": 16.58,
+          "lat": 74.83
+        },
+        {
+          "lon": 16.72,
+          "lat": 74.83
+        },
+        {
+          "lon": 16.82,
+          "lat": 74.85
+        },
+        {
+          "lon": 17.13,
+          "lat": 74.85
+        },
+        {
+          "lon": 7.2,
+          "lat": 74.87
+        },
+        {
+          "lon": 17.13,
+          "lat": 74.9
+        },
+        {
+          "lon": 17.78,
+          "lat": 74.95
+        }
+      ],
+      "mean_temperature": {
+        "mean": 10.389652070294794,
+        "points_processed": 49,
+        "total_points": 49
+      },
+      "mean_salinity": {
+        "mean": 35.6858949117896,
+        "points_processed": 49,
+        "total_points": 49
+      }
+    },
+    "august": {
+      "centroid": {
+        "lon": 12.778250625,
+        "lat": 54.040790375
+      },
+      "occurences": [
+        {
+          "lon": 6.774,
+          "lat": 42.909833
+        },
+        {
+          "lon": 7.220333,
+          "lat": 43.485
+        },
+        {
+          "lon": 7.818928,
+          "lat": 43.39437
+        },
+        {
+          "lon": 15.57678,
+          "lat": 38.11857
+        },
+        {
+          "lon": 7.945964,
+          "lat": 43.49855
+        },
+        {
+          "lon": 19.75,
+          "lat": 72.18
+        },
+        {
+          "lon": 18.82,
+          "lat": 73.82
+        },
+        {
+          "lon": 18.32,
+          "lat": 74.92
+        }
+      ],
+      "mean_temperature": {
+        "mean": 17.935480814886034,
+        "points_processed": 8,
+        "total_points": 8
+      },
+      "mean_salinity": {
+        "mean": 36.91030620303569,
+        "points_processed": 8,
+        "total_points": 8
+      }
+    },
+    "september": {
+      "centroid": {
+        "lon": 12.898633222222221,
+        "lat": 56.55643811111111
+      },
+      "occurences": [
+        {
+          "lon": 9.776933,
+          "lat": 40.977733
+        },
+        {
+          "lon": 7.908907,
+          "lat": 43.72432
+        },
+        {
+          "lon": 7.739212,
+          "lat": 43.41994
+        },
+        {
+          "lon": 8.056842,
+          "lat": 43.35969
+        },
+        {
+          "lon": 8.185805,
+          "lat": 43.36626
+        },
+        {
+          "lon": 19.12,
+          "lat": 72.63
+        },
+        {
+          "lon": 18.5,
+          "lat": 73.78
+        },
+        {
+          "lon": 18.72,
+          "lat": 73.83
+        },
+        {
+          "lon": 18.08,
+          "lat": 73.92
+        }
+      ],
+      "mean_temperature": {
+        "mean": 16.597407908951766,
+        "points_processed": 9,
+        "total_points": 9
+      },
+      "mean_salinity": {
+        "mean": 36.6636129359479,
+        "points_processed": 9,
+        "total_points": 9
+      }
+    },
+    "october": {
+      "centroid": {
+        "lon": 11.370050384615386,
+        "lat": 53.80146438461538
+      },
+      "occurences": [
+        {
+          "lon": 7.144833,
+          "lat": 42.915167
+        },
+        {
+          "lon": 7.03,
+          "lat": 42.901667
+        },
+        {
+          "lon": 7.18,
+          "lat": 42.903333
+        },
+        {
+          "lon": 7.125,
+          "lat": 42.946667
+        },
+        {
+          "lon": 9.950733,
+          "lat": 41.033883
+        },
+        {
+          "lon": 7.715936,
+          "lat": 43.54427
+        },
+        {
+          "lon": 7.194993,
+          "lat": 43.45558
+        },
+        {
+          "lon": 15.73916,
+          "lat": 38.34847
+        },
+        {
+          "lon": 16.18,
+          "lat": 69.58
+        },
+        {
+          "lon": 19.45,
+          "lat": 71.73
+        },
+        {
+          "lon": 11.87,
+          "lat": 72.48
+        },
+        {
+          "lon": 13.55,
+          "lat": 72.9
+        },
+        {
+          "lon": 17.68,
+          "lat": 74.68
+        }
+      ],
+      "mean_temperature": {
+        "mean": 15.97592792284608,
+        "points_processed": 13,
+        "total_points": 13
+      },
+      "mean_salinity": {
+        "mean": 36.82364396940211,
+        "points_processed": 13,
+        "total_points": 13
+      }
+    },
+    "november": {
+      "centroid": {
+        "lon": -3.8936,
+        "lat": 45.9021745
+      },
+      "occurences": [
+        {
+          "lon": -3.772094,
+          "lat": 45.777114
+        },
+        {
+          "lon": -4.015106,
+          "lat": 46.027235
+        }
+      ],
+      "mean_temperature": {
+        "mean": 16.604565318790264,
+        "points_processed": 2,
+        "total_points": 2
+      },
+      "mean_salinity": {
+        "mean": 35.737742811397766,
+        "points_processed": 2,
+        "total_points": 2
+      }
+    },
+    "december": {
+      "centroid": {
+        "lon": 2.27806,
+        "lat": 54.418955
+      },
+      "occurences": [
+        {
+          "lon": -4.34562,
+          "lat": 47.83602
+        },
+        {
+          "lon": -3.22748,
+          "lat": 47.66036
+        },
+        {
+          "lon": 0.18534,
+          "lat": 49.67944
+        },
+        {
+          "lon": 16.5,
+          "lat": 72.5
+        }
+      ],
+      "mean_temperature": {
+        "mean": 11.42378333103833,
+        "points_processed": 4,
+        "total_points": 4
+      },
+      "mean_salinity": {
+        "mean": 35.15831319336308,
+        "points_processed": 4,
+        "total_points": 4
+      }
+    }
+  },
+  "Balaenoptera acutorostrata": {
+    "january": {
+      "centroid": null,
+      "occurences": [],
+      "mean_temperature": "null",
+      "mean_salinity": "null"
+    },
+    "february": {
+      "centroid": null,
+      "occurences": [],
+      "mean_temperature": "null",
+      "mean_salinity": "null"
+    },
+    "march": {
+      "centroid": {
+        "lon": -1.36288,
+        "lat": 43.94476
+      },
+      "occurences": [
+        {
+          "lon": -1.36288,
+          "lat": 43.94476
+        }
+      ],
+      "mean_temperature": {
+        "mean": 12.557294114738703,
+        "points_processed": 1,
+        "total_points": 1
+      },
+      "mean_salinity": {
+        "mean": 34.54789876844734,
+        "points_processed": 1,
+        "total_points": 1
+      }
+    },
+    "april": {
+      "centroid": {
+        "lon": 1.5935,
+        "lat": 50.7311
+      },
+      "occurences": [
+        {
+          "lon": 1.5935,
+          "lat": 50.7311
+        }
+      ],
+      "mean_temperature": {
+        "mean": 10.238999062947563,
+        "points_processed": 1,
+        "total_points": 1
+      },
+      "mean_salinity": {
+        "mean": 33.927166795083245,
+        "points_processed": 1,
+        "total_points": 1
+      }
+    },
+    "may": {
+      "centroid": {
+        "lon": 9.390899999999998,
+        "lat": 62.645900000000005
+      },
+      "occurences": [
+        {
+          "lon": -1.0455,
+          "lat": 49.3895
+        },
+        {
+          "lon": 3.22,
+          "lat": 56.58
+        },
+        {
+          "lon": 12.65,
+          "lat": 68.6
+        },
+        {
+          "lon": 16.33,
+          "lat": 69.28
+        },
+        {
+          "lon": 15.8,
+          "lat": 69.38
+        }
+      ],
+      "mean_temperature": {
+        "mean": 8.807771642329957,
+        "points_processed": 5,
+        "total_points": 5
+      },
+      "mean_salinity": {
+        "mean": 34.54953298406831,
+        "points_processed": 5,
+        "total_points": 5
+      }
+    },
+    "june": {
+      "centroid": {
+        "lon": 16.094285714285714,
+        "lat": 70.01952380952382
+      },
+      "occurences": [
+        {
+          "lon": 3.3,
+          "lat": 56.4
+        },
+        {
+          "lon": 3.22,
+          "lat": 56.42
+        },
+        {
+          "lon": 16.6,
+          "lat": 69.98
+        },
+        {
+          "lon": 13.63,
+          "lat": 68.02
+        },
+        {
+          "lon": 13.75,
+          "lat": 68.07
+        },
+        {
+          "lon": 13.82,
+          "lat": 68.08
+        },
+        {
+          "lon": 13.83,
+          "lat": 68.08
+        },
+        {
+          "lon": 13.85,
+          "lat": 68.1
+        },
+        {
+          "lon": 20.5,
+          "lat": 71.2
+        },
+        {
+          "lon": 23.7,
+          "lat": 71.2
+        },
+        {
+          "lon": 25.0,
+          "lat": 71.3
+        },
+        {
+          "lon": 19.1,
+          "lat": 71.73
+        },
+        {
+          "lon": 17.42,
+          "lat": 72.08
+        },
+        {
+          "lon": 16.65,
+          "lat": 72.17
+        },
+        {
+          "lon": 17.82,
+          "lat": 73.3
+        },
+        {
+          "lon": 18.47,
+          "lat": 73.45
+        },
+        {
+          "lon": 17.47,
+          "lat": 73.72
+        },
+        {
+          "lon": 18.13,
+          "lat": 73.77
+        },
+        {
+          "lon": 18.22,
+          "lat": 73.78
+        },
+        {
+          "lon": 15.78,
+          "lat": 74.63
+        },
+        {
+          "lon": 17.72,
+          "lat": 74.93
+        }
+      ],
+      "mean_temperature": {
+        "mean": 8.069575949377223,
+        "points_processed": 21,
+        "total_points": 21
+      },
+      "mean_salinity": {
+        "mean": 34.60213967613298,
+        "points_processed": 21,
+        "total_points": 21
+      }
+    },
+    "july": {
+      "centroid": {
+        "lon": 15.355214285714284,
+        "lat": 72.03911428571429
+      },
+      "occurences": [
+        {
+          "lon": -1.2645,
+          "lat": 49.5966
+        },
+        {
+          "lon": 3.2,
+          "lat": 56.57
+        },
+        {
+          "lon": 4.55,
+          "lat": 57.4
+        },
+        {
+          "lon": 5.12,
+          "lat": 57.43
+        },
+        {
+          "lon": 3.15,
+          "lat": 63.08
+        },
+        {
+          "lon": 12.98,
+          "lat": 67.63
+        },
+        {
+          "lon": 14.1,
+          "lat": 68.07
+        },
+        {
+          "lon": 13.83,
+          "lat": 68.08
+        },
+        {
+          "lon": 15.98,
+          "lat": 68.37
+        },
+        {
+          "lon": 12.27,
+          "lat": 72.62
+        },
+        {
+          "lon": 18.48,
+          "lat": 73.42
+        },
+        {
+          "lon": 17.35,
+          "lat": 73.43
+        },
+        {
+          "lon": 17.37,
+          "lat": 73.47
+        },
+        {
+          "lon": 17.38,
+          "lat": 73.48
+        },
+        {
+          "lon": 16.2,
+          "lat": 73.85
+        },
+        {
+          "lon": 16.27,
+          "lat": 73.87
+        },
+        {
+          "lon": 17.6,
+          "lat": 73.88
+        },
+        {
+          "lon": 16.73,
+          "lat": 73.92
+        },
+        {
+          "lon": 16.17,
+          "lat": 73.98
+        },
+        {
+          "lon": 17.25,
+          "lat": 74.03
+        },
+        {
+          "lon": 17.78,
+          "lat": 74.13
+        },
+        {
+          "lon": 17.88,
+          "lat": 74.15
+        },
+        {
+          "lon": 17.63,
+          "lat": 74.25
+        },
+        {
+          "lon": 17.32,
+          "lat": 74.42
+        },
+        {
+          "lon": 17.27,
+          "lat": 74.45
+        },
+        {
+          "lon": 17.7,
+          "lat": 74.47
+        },
+        {
+          "lon": 17.47,
+          "lat": 74.47
+        },
+        {
+          "lon": 17.77,
+          "lat": 74.47
+        },
+        {
+          "lon": 17.42,
+          "lat": 74.5
+        },
+        {
+          "lon": 17.27,
+          "lat": 74.52
+        },
+        {
+          "lon": 17.53,
+          "lat": 74.55
+        },
+        {
+          "lon": 16.93,
+          "lat": 74.57
+        },
+        {
+          "lon": 17.13,
+          "lat": 74.6
+        },
+        {
+          "lon": 7.3,
+          "lat": 74.6
+        },
+        {
+          "lon": 17.62,
+          "lat": 74.62
+        },
+        {
+          "lon": 17.15,
+          "lat": 74.63
+        },
+        {
+          "lon": 18.13,
+          "lat": 74.65
+        },
+        {
+          "lon": 17.63,
+          "lat": 74.68
+        },
+        {
+          "lon": 17.33,
+          "lat": 74.68
+        },
+        {
+          "lon": 17.72,
+          "lat": 74.72
+        },
+        {
+          "lon": 18.55,
+          "lat": 74.73
+        },
+        {
+          "lon": 17.92,
+          "lat": 74.75
+        },
+        {
+          "lon": 18.52,
+          "lat": 74.77
+        },
+        {
+          "lon": 18.23,
+          "lat": 74.82
+        },
+        {
+          "lon": 16.57,
+          "lat": 74.83
+        },
+        {
+          "lon": 17.02,
+          "lat": 74.87
+        },
+        {
+          "lon": 16.87,
+          "lat": 74.92
+        },
+        {
+          "lon": 17.78,
+          "lat": 74.95
+        },
+        {
+          "lon": 16.25,
+          "lat": 74.97
+        }
+      ],
+      "mean_temperature": {
+        "mean": 7.444168452225437,
+        "points_processed": 49,
+        "total_points": 49
+      },
+      "mean_salinity": {
+        "mean": 34.63710266359391,
+        "points_processed": 49,
+        "total_points": 49
+      }
+    },
+    "august": {
+      "centroid": {
+        "lon": 13.346666666666668,
+        "lat": 69.97666666666666
+      },
+      "occurences": [
+        {
+          "lon": 3.0,
+          "lat": 56.5
+        },
+        {
+          "lon": 4.67,
+          "lat": 63.15
+        },
+        {
+          "lon": 4.42,
+          "lat": 63.23
+        },
+        {
+          "lon": -4.4,
+          "lat": 63.45
+        },
+        {
+          "lon": 9.5,
+          "lat": 64.38
+        },
+        {
+          "lon": 9.12,
+          "lat": 65.68
+        },
+        {
+          "lon": 12.78,
+          "lat": 67.18
+        },
+        {
+          "lon": 19.92,
+          "lat": 70.73
+        },
+        {
+          "lon": 17.25,
+          "lat": 73.43
+        },
+        {
+          "lon": 18.5,
+          "lat": 73.92
+        },
+        {
+          "lon": 18.23,
+          "lat": 74.63
+        },
+        {
+          "lon": 18.23,
+          "lat": 74.63
+        },
+        {
+          "lon": 18.35,
+          "lat": 74.72
+        },
+        {
+          "lon": 18.4,
+          "lat": 74.72
+        },
+        {
+          "lon": 18.27,
+          "lat": 74.75
+        },
+        {
+          "lon": 17.9,
+          "lat": 74.78
+        },
+        {
+          "lon": 18.27,
+          "lat": 74.85
+        },
+        {
+          "lon": 17.83,
+          "lat": 74.85
+        }
+      ],
+      "mean_temperature": {
+        "mean": 9.030006951018846,
+        "points_processed": 18,
+        "total_points": 18
+      },
+      "mean_salinity": {
+        "mean": 34.235235290314705,
+        "points_processed": 18,
+        "total_points": 18
+      }
+    },
+    "september": {
+      "centroid": {
+        "lon": 15.736153846153845,
+        "lat": 68.78307692307693
+      },
+      "occurences": [
+        {
+          "lon": 3.22,
+          "lat": 56.47
+        },
+        {
+          "lon": 2.6,
+          "lat": 61.42
+        },
+        {
+          "lon": -3.27,
+          "lat": 64.95
+        },
+        {
+          "lon": 20.53,
+          "lat": 70.72
+        },
+        {
+          "lon": 23.4,
+          "lat": 70.9
+        },
+        {
+          "lon": 22.57,
+          "lat": 70.92
+        },
+        {
+          "lon": 23.63,
+          "lat": 70.98
+        },
+        {
+          "lon": 17.45,
+          "lat": 71.22
+        },
+        {
+          "lon": 23.27,
+          "lat": 71.33
+        },
+        {
+          "lon": 16.7,
+          "lat": 71.35
+        },
+        {
+          "lon": 18.12,
+          "lat": 69.45
+        },
+        {
+          "lon": 17.27,
+          "lat": 71.87
+        },
+        {
+          "lon": 19.08,
+          "lat": 72.6
+        }
+      ],
+      "mean_temperature": {
+        "mean": 10.943408865415883,
+        "points_processed": 13,
+        "total_points": 13
+      },
+      "mean_salinity": {
+        "mean": 34.1848392147698,
+        "points_processed": 13,
+        "total_points": 13
+      }
+    },
+    "october": {
+      "centroid": {
+        "lon": 11.172,
+        "lat": 68.38199999999999
+      },
+      "occurences": [
+        {
+          "lon": 2.95,
+          "lat": 61.8
+        },
+        {
+          "lon": 3.13,
+          "lat": 62.33
+        },
+        {
+          "lon": 18.23,
+          "lat": 70.25
+        },
+        {
+          "lon": 13.3,
+          "lat": 72.9
+        },
+        {
+          "lon": 18.25,
+          "lat": 74.63
+        }
+      ],
+      "mean_temperature": {
+        "mean": 8.55354472336666,
+        "points_processed": 5,
+        "total_points": 5
+      },
+      "mean_salinity": {
+        "mean": 34.54529273273655,
+        "points_processed": 5,
+        "total_points": 5
+      }
+    },
+    "november": {
+      "centroid": {
+        "lon": 9.792326666666668,
+        "lat": 63.52999
+      },
+      "occurences": [
+        {
+          "lon": -2.75604,
+          "lat": 47.49994
+        },
+        {
+          "lon": 3.27,
+          "lat": 56.38
+        },
+        {
+          "lon": 2.97,
+          "lat": 61.22
+        },
+        {
+          "lon": 24.18,
+          "lat": 70.7
+        },
+        {
+          "lon": 14.97,
+          "lat": 72.45
+        },
+        {
+          "lon": 16.12,
+          "lat": 72.93
+        }
+      ],
+      "mean_temperature": {
+        "mean": 9.725072551302146,
+        "points_processed": 6,
+        "total_points": 6
+      },
+      "mean_salinity": {
+        "mean": 34.81168820701714,
+        "points_processed": 6,
+        "total_points": 6
+      }
+    },
+    "december": {
+      "centroid": {
+        "lon": 0.786625,
+        "lat": 53.732
+      },
+      "occurences": [
+        {
+          "lon": 0.78908,
+          "lat": 53.73233
+        },
+        {
+          "lon": 0.78417,
+          "lat": 53.73167
+        }
+      ],
+      "mean_temperature": {
+        "mean": 8.75036569533259,
+        "points_processed": 2,
+        "total_points": 2
+      },
+      "mean_salinity": {
+        "mean": 34.35211860472375,
+        "points_processed": 2,
+        "total_points": 2
+      }
+    }
+  },
+  "Megaptera novaeangliae": {
+    "january": {
+      "centroid": null,
+      "occurences": [],
+      "mean_temperature": "null",
+      "mean_salinity": "null"
+    },
+    "february": {
+      "centroid": {
+        "lon": -0.5369460000000004,
+        "lat": 62.70262325
+      },
+      "occurences": [
+        {
+          "lon": 1.522216,
+          "lat": 50.760493
+        },
+        {
+          "lon": -10.67,
+          "lat": 65.42
+        },
+        {
+          "lon": -9.13,
+          "lat": 65.48
+        },
+        {
+          "lon": 16.13,
+          "lat": 69.15
+        }
+      ],
+      "mean_temperature": {
+        "mean": 4.499675244046122,
+        "points_processed": 4,
+        "total_points": 4
+      },
+      "mean_salinity": {
+        "mean": 34.61115325964941,
+        "points_processed": 4,
+        "total_points": 4
+      }
+    },
+    "march": {
+      "centroid": {
+        "lon": 17.25,
+        "lat": 70.35
+      },
+      "occurences": [
+        {
+          "lon": 17.32,
+          "lat": 70.28
+        },
+        {
+          "lon": 17.18,
+          "lat": 70.42
+        }
+      ],
+      "mean_temperature": {
+        "mean": 5.5895279977318175,
+        "points_processed": 2,
+        "total_points": 2
+      },
+      "mean_salinity": {
+        "mean": 34.84070812065215,
+        "points_processed": 2,
+        "total_points": 2
+      }
+    },
+    "april": {
+      "centroid": {
+        "lon": 15.995000000000001,
+        "lat": 69.41499999999999
+      },
+      "occurences": [
+        {
+          "lon": 16.42,
+          "lat": 69.38
+        },
+        {
+          "lon": 15.57,
+          "lat": 69.45
+        }
+      ],
+      "mean_temperature": {
+        "mean": 5.714455901974517,
+        "points_processed": 2,
+        "total_points": 2
+      },
+      "mean_salinity": {
+        "mean": 34.79951637970778,
+        "points_processed": 2,
+        "total_points": 2
+      }
+    },
+    "may": {
+      "centroid": {
+        "lon": 14.235,
+        "lat": 71.39
+      },
+      "occurences": [
+        {
+          "lon": 11.5,
+          "lat": 68.53
+        },
+        {
+          "lon": 16.97,
+          "lat": 74.25
+        }
+      ],
+      "mean_temperature": {
+        "mean": 6.310803566034883,
+        "points_processed": 2,
+        "total_points": 2
+      },
+      "mean_salinity": {
+        "mean": 34.911863783723675,
+        "points_processed": 2,
+        "total_points": 2
+      }
+    },
+    "june": {
+      "centroid": {
+        "lon": 18.314,
+        "lat": 71.97800000000001
+      },
+      "occurences": [
+        {
+          "lon": 20.83,
+          "lat": 71.07
+        },
+        {
+          "lon": 19.18,
+          "lat": 71.57
+        },
+        {
+          "lon": 17.47,
+          "lat": 69.17
+        },
+        {
+          "lon": 17.32,
+          "lat": 74.03
+        },
+        {
+          "lon": 16.77,
+          "lat": 74.05
+        }
+      ],
+      "mean_temperature": {
+        "mean": 7.260965152832393,
+        "points_processed": 5,
+        "total_points": 5
+      },
+      "mean_salinity": {
+        "mean": 34.707532648938056,
+        "points_processed": 5,
+        "total_points": 5
+      }
+    },
+    "july": {
+      "centroid": {
+        "lon": 13.249062499999999,
+        "lat": 73.73656473333334
+      },
+      "occurences": [
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -17.578125,
+          "lat": 66.126942
+        },
+        {
+          "lon": 18.52,
+          "lat": 74.0
+        },
+        {
+          "lon": 18.67,
+          "lat": 74.02
+        },
+        {
+          "lon": 15.53,
+          "lat": 74.08
+        },
+        {
+          "lon": 15.4,
+          "lat": 74.12
+        },
+        {
+          "lon": 17.78,
+          "lat": 74.25
+        },
+        {
+          "lon": 15.22,
+          "lat": 74.28
+        },
+        {
+          "lon": 15.58,
+          "lat": 74.28
+        },
+        {
+          "lon": 17.6,
+          "lat": 74.35
+        },
+        {
+          "lon": 15.28,
+          "lat": 74.58
+        },
+        {
+          "lon": 15.3,
+          "lat": 74.58
+        },
+        {
+          "lon": 18.13,
+          "lat": 74.65
+        },
+        {
+          "lon": 15.27,
+          "lat": 74.65
+        },
+        {
+          "lon": 17.88,
+          "lat": 74.72
+        },
+        {
+          "lon": 18.55,
+          "lat": 74.73
+        },
+        {
+          "lon": 16.37,
+          "lat": 74.77
+        },
+        {
+          "lon": 16.4,
+          "lat": 74.77
+        },
+        {
+          "lon": 16.45,
+          "lat": 74.78
+        },
+        {
+          "lon": 16.48,
+          "lat": 74.78
+        },
+        {
+          "lon": 16.57,
+          "lat": 74.78
+        },
+        {
+          "lon": 16.48,
+          "lat": 74.78
+        },
+        {
+          "lon": 16.37,
+          "lat": 74.8
+        },
+        {
+          "lon": 16.9,
+          "lat": 74.83
+        },
+        {
+          "lon": 16.9,
+          "lat": 74.85
+        },
+        {
+          "lon": 17.12,
+          "lat": 74.85
+        },
+        {
+          "lon": 16.9,
+          "lat": 74.87
+        },
+        {
+          "lon": 17.17,
+          "lat": 74.88
+        },
+        {
+          "lon": 16.87,
+          "lat": 74.92
+        }
+      ],
+      "mean_temperature": {
+        "mean": 6.534852480318354,
+        "points_processed": 30,
+        "total_points": 30
+      },
+      "mean_salinity": {
+        "mean": 34.83025680293536,
+        "points_processed": 30,
+        "total_points": 30
+      }
+    },
+    "august": {
+      "centroid": {
+        "lon": -3.973076923076923,
+        "lat": 68.56692307692308
+      },
+      "occurences": [
+        {
+          "lon": -17.5,
+          "lat": 66.1
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": 20.75,
+          "lat": 70.82
+        },
+        {
+          "lon": 20.68,
+          "lat": 70.95
+        },
+        {
+          "lon": 16.2,
+          "lat": 68.9
+        },
+        {
+          "lon": 20.42,
+          "lat": 69.6
+        },
+        {
+          "lon": 18.85,
+          "lat": 73.63
+        },
+        {
+          "lon": 18.85,
+          "lat": 73.77
+        },
+        {
+          "lon": 18.23,
+          "lat": 74.63
+        },
+        {
+          "lon": 18.35,
+          "lat": 74.72
+        },
+        {
+          "lon": 18.4,
+          "lat": 74.72
+        },
+        {
+          "lon": 18.27,
+          "lat": 74.75
+        }
+      ],
+      "mean_temperature": {
+        "mean": 8.54514341298756,
+        "points_processed": 26,
+        "total_points": 26
+      },
+      "mean_salinity": {
+        "mean": 34.59434233365351,
+        "points_processed": 26,
+        "total_points": 26
+      }
+    },
+    "september": {
+      "centroid": {
+        "lon": -9.080010166666666,
+        "lat": 65.96379633333335
+      },
+      "occurences": [
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -18.32,
+          "lat": 66.01
+        },
+        {
+          "lon": -17.500122,
+          "lat": 66.095556
+        },
+        {
+          "lon": 10.65,
+          "lat": 59.9
+        },
+        {
+          "lon": -3.27,
+          "lat": 64.95
+        },
+        {
+          "lon": 13.45,
+          "lat": 68.97
+        },
+        {
+          "lon": 15.95,
+          "lat": 69.58
+        }
+      ],
+      "mean_temperature": {
+        "mean": 8.764191441388006,
+        "points_processed": 12,
+        "total_points": 12
+      },
+      "mean_salinity": {
+        "mean": 33.781475287601445,
+        "points_processed": 12,
+        "total_points": 12
+      }
+    },
+    "october": {
+      "centroid": {
+        "lon": 13.501666666666667,
+        "lat": 70.86666666666667
+      },
+      "occurences": [
+        {
+          "lon": 3.15,
+          "lat": 62.3
+        },
+        {
+          "lon": 15.83,
+          "lat": 69.45
+        },
+        {
+          "lon": 13.77,
+          "lat": 72.85
+        },
+        {
+          "lon": 10.52,
+          "lat": 72.97
+        },
+        {
+          "lon": 18.37,
+          "lat": 73.78
+        },
+        {
+          "lon": 19.37,
+          "lat": 73.85
+        }
+      ],
+      "mean_temperature": {
+        "mean": 7.712025484161063,
+        "points_processed": 6,
+        "total_points": 6
+      },
+      "mean_salinity": {
+        "mean": 34.65577146566694,
+        "points_processed": 6,
+        "total_points": 6
+      }
+    },
+    "november": {
+      "centroid": {
+        "lon": -2.523325,
+        "lat": 45.656274
+      },
+      "occurences": [
+        {
+          "lon": -2.523325,
+          "lat": 45.656274
+        }
+      ],
+      "mean_temperature": {
+        "mean": 17.006047051289034,
+        "points_processed": 1,
+        "total_points": 1
+      },
+      "mean_salinity": {
+        "mean": 35.67206751883043,
+        "points_processed": 1,
+        "total_points": 1
+      }
+    },
+    "december": {
+      "centroid": {
+        "lon": 16.5,
+        "lat": 72.5
+      },
+      "occurences": [
+        {
+          "lon": 16.5,
+          "lat": 72.5
+        }
+      ],
+      "mean_temperature": {
+        "mean": 7.0450483604192735,
+        "points_processed": 1,
+        "total_points": 1
+      },
+      "mean_salinity": {
+        "mean": 34.81271519936621,
+        "points_processed": 1,
+        "total_points": 1
+      }
+    }
+  }
+}
