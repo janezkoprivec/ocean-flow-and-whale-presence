@@ -1,28 +1,18 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useState } from "react";
 import "@mantine/core/styles.css";
 import "@mantine/charts/styles.css";
 import "@maptiler/sdk/dist/maptiler-sdk.css";
 import {
-  AppShell,
-  Badge,
-  Button,
+  ActionIcon,
   Container,
-  Divider,
-  Group,
   MantineProvider,
-  Paper,
-  rem,
-  Select,
-  SimpleGrid,
-  Slider,
   Stack,
-  Switch,
+  Title,
   Text,
-  Title
+  Box
 } from "@mantine/core";
-import { LineChart, BarChart } from "@mantine/charts";
-import * as maptilersdk from "@maptiler/sdk";
 import { theme } from "./theme";
+import OceanFlowMap from "./components/OceanFlowMap";
 import WhaleGuessingGame from "./components/WhaleGuessingGame";
 import WhalesSalinityTemp from "./components/WhalesSalinityTemp";
 import StatsBySpecies from "./components/StatsBySpecies";
@@ -30,466 +20,248 @@ import WhalePresenceGame from "./components/WhalePresence";
 import ExploreTheOceans from "./components/ExploreTheOceans";
 import DetailedOverviewBySpecies from "./components/DetailedOverviewBySpecies";
 
-type WhaleFeature = {
-  type: "Feature";
-  geometry: { type: "Point"; coordinates: [number, number] };
-  properties: Record<string, any>;
-};
-
-type WhaleCollection = {
-  type: "FeatureCollection";
-  features: WhaleFeature[];
-};
-
-type CurrentsData = {
-  steps: Array<Array<{ lat: number; lon: number; w: number }>>;
-  labels?: string[];
-};
-
-type SeasonalityPoint = { label: string; count: number; monthIndex: number };
-
-const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY ?? "j72DJvKfg99jStOjT7xE";
-const MONTH_COUNT = 24; // 2011–2012 covered by ECCO
-
-const bookmarks: Record<string, { center: [number, number]; zoom: number }> = {
-  med: { center: [15, 35], zoom: 4 },
-  biscay: { center: [-5, 45], zoom: 5 },
-  norway: { center: [10, 65], zoom: 4.5 },
-  northsea: { center: [3, 56], zoom: 5 },
-  iceland: { center: [-20, 65], zoom: 4.5 }
-};
-
-function formatMonth(idx: number) {
-  const year = 2011 + Math.floor(idx / 12);
-  const month = (idx % 12) + 1;
-  return `${year}-${String(month).padStart(2, "0")}`;
-}
-
-function getSpeciesName(props: Record<string, any>) {
-  return (
-    props.species ||
-    props.species_name ||
-    props.spec ||
-    props.scientificName ||
-    props.commonName ||
-    "Unknown"
-  );
-}
-
-function buildSpeciesColorExpression(speciesList: string[]) {
-  if (!speciesList.length) return "#77c5f7";
-  const expr: any[] = [
-    "match",
-    ["coalesce", ["get", "species"], ["get", "species_name"], ["get", "spec"], ["get", "scientificName"], ["get", "commonName"]]
-  ];
-  speciesList.forEach(sp => {
-    const hue = Math.abs(sp.split("").reduce((h, ch) => (h << 5) - h + ch.charCodeAt(0), 0)) % 360;
-    const color = `hsl(${hue},70%,60%)`;
-    expr.push(sp, color);
-  });
-  expr.push("#77c5f7");
-  return expr;
-}
+const COMPONENTS = [
+  { label: "Ocean Flow Map", component: OceanFlowMap },
+  { label: "Detailed Overview", component: DetailedOverviewBySpecies },
+  { label: "Whale Guessing Game", component: WhaleGuessingGame },
+  { label: "Salinity & Temperature", component: WhalesSalinityTemp },
+  { label: "Stats by Species", component: StatsBySpecies },
+  { label: "Whale Presence", component: WhalePresenceGame },
+  { label: "Explore the Oceans", component: ExploreTheOceans }
+];
 
 export default function App() {
-  const mapContainerRef = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<maptilersdk.Map | null>(null);
-  const mapReadyRef = useRef(false);
-  const [mapReady, setMapReady] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
 
-  const [range, setRange] = useState<"2011_2012" | "2010_2013">("2011_2012");
-  const [species, setSpecies] = useState<string>("All");
-  const [speciesOptions, setSpeciesOptions] = useState<string[]>([]);
-  const [monthIndex, setMonthIndex] = useState(0);
-  const [playing, setPlaying] = useState(false);
-  const [showWhales, setShowWhales] = useState(true);
-  const [showCurrents, setShowCurrents] = useState(true);
+  const nextStep = () => {
+    setActiveStep(prev => Math.min(prev + 1, COMPONENTS.length - 1));
+  };
 
-  const [whalesData, setWhalesData] = useState<WhaleCollection | null>(null);
-  const [currents, setCurrents] = useState<CurrentsData | null>(null);
-  const [seasonality, setSeasonality] = useState<SeasonalityPoint[]>([]);
+  const prevStep = () => {
+    setActiveStep(prev => Math.max(prev - 1, 0));
+  };
 
-  useEffect(() => {
-    let cancelled = false;
-    const load = async () => {
-      const url =
-        range === "2010_2013"
-          ? "/data/whales_2010_2013.geojson"
-          : "/data/whales_2011_2012.geojson";
-      const res = await fetch(url);
-      const json: WhaleCollection = await res.json();
-      if (!cancelled) setWhalesData(json);
-    };
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, [range]);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch("/data/vertical_flow_w_surface.json")
-      .then(r => r.json())
-      .then((data: CurrentsData) => {
-        if (!cancelled) setCurrents(data);
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    fetch("/data/whales_monthly_counts.csv")
-      .then(r => r.text())
-      .then(text => {
-        const [, ...lines] = text.trim().split("\n");
-        const parsed = lines
-          .map(line => line.split(","))
-          .map(([year, month, count]) => ({
-            year: Number(year),
-            month: Number(month),
-            count: Number(count)
-          }))
-          .map(d => ({
-            label: `${d.year}-${String(d.month).padStart(2, "0")}`,
-            count: d.count,
-            monthIndex: (d.year - 2011) * 12 + (d.month - 1)
-          }))
-          .sort((a, b) => a.monthIndex - b.monthIndex);
-        setSeasonality(parsed);
-      })
-      .catch(() => {});
-  }, []);
-
-  useEffect(() => {
-    if (!mapContainerRef.current || mapRef.current) return;
-    maptilersdk.config.apiKey = MAPTILER_KEY;
-    const map = new maptilersdk.Map({
-      container: mapContainerRef.current,
-      style: maptilersdk.MapStyle.DATAVIZ.DARK,
-      center: [0, 45],
-      zoom: 1.8,
-      pitch: 35,
-      bearing: 0,
-      projection: "globe"
-    });
-    mapRef.current = map;
-
-    map.on("load", () => {
-      mapReadyRef.current = true;
-      setMapReady(true);
-      map.addSource("whales", {
-        type: "geojson",
-        data: { type: "FeatureCollection", features: [] }
-      });
-      map.addLayer({
-        id: "whales",
-        type: "circle",
-        source: "whales",
-        paint: {
-          "circle-radius": 4,
-          "circle-color": "#77c5f7",
-          "circle-stroke-color": "#000",
-          "circle-stroke-width": 0.4,
-          "circle-opacity": 0.9
-        }
-      });
-    });
-
-    return () => {
-      mapReadyRef.current = false;
-      setMapReady(false);
-      map.remove();
-      mapRef.current = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!whalesData) return;
-    const set = new Set<string>();
-    whalesData.features.forEach(f => {
-      const s = getSpeciesName(f.properties);
-      if (s) set.add(String(s));
-    });
-    const opts = Array.from(set).sort();
-    setSpeciesOptions(opts);
-    if (species !== "All" && !set.has(species)) {
-      setSpecies("All");
-    }
-  }, [whalesData]);
-
-  const filteredWhales = useMemo<WhaleCollection | null>(() => {
-    if (!whalesData) return null;
-    const features = whalesData.features.filter(f => {
-      const p = f.properties || {};
-      let inRange = true;
-      if (range === "2011_2012") inRange = p.year >= 2011 && p.year <= 2012;
-      if (range === "2010_2013") inRange = p.year >= 2010 && p.year <= 2013;
-
-      const speciesMatch =
-        species === "All" ||
-        [p.species, p.species_name, p.spec, p.scientificName, p.commonName].includes(species);
-
-      let monthMatch = true;
-      if (typeof p.year === "number" && typeof p.month === "number") {
-        const idx = (p.year - 2011) * 12 + (p.month - 1);
-        monthMatch = Math.abs(idx - monthIndex) <= 1;
-      }
-
-      return inRange && speciesMatch && monthMatch;
-    });
-    return { ...whalesData, features };
-  }, [whalesData, range, species, monthIndex]);
-
-  const speciesChart = useMemo(() => {
-    if (!filteredWhales) return [];
-    const counts: Record<string, number> = {};
-    filteredWhales.features.forEach(f => {
-      const s = getSpeciesName(f.properties);
-      counts[s] = (counts[s] || 0) + 1;
-    });
-    return Object.entries(counts)
-      .map(([species, count]) => ({ species, count }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 10);
-  }, [filteredWhales]);
-
-  useEffect(() => {
-    if (!mapReadyRef.current || !mapRef.current || !mapRef.current.getSource("whales")) return;
-    const map = mapRef.current;
-    if (!showWhales) {
-      map.setLayoutProperty("whales", "visibility", "none");
-      return;
-    }
-    map.setLayoutProperty("whales", "visibility", "visible");
-    if (filteredWhales) {
-      const src = map.getSource("whales") as maptilersdk.GeoJSONSource | undefined;
-      src?.setData(filteredWhales as any);
-    }
-    const paintExpr = buildSpeciesColorExpression(speciesOptions);
-    map.setPaintProperty("whales", "circle-color", paintExpr as any);
-  }, [filteredWhales, showWhales, speciesOptions, mapReady]);
-
-  useEffect(() => {
-    if (!mapReadyRef.current || !mapRef.current || !currents) return;
-    const map = mapRef.current;
-    const layerId = "currents";
-
-    if (!showCurrents) {
-      if (map.getLayer(layerId)) map.removeLayer(layerId);
-      if (map.getSource(layerId)) map.removeSource(layerId);
-      return;
-    }
-
-    const step = currents.steps?.[Math.min(monthIndex, currents.steps.length - 1)] || [];
-    const geojson = {
-      type: "FeatureCollection",
-      features: step.map(pt => ({
-        type: "Feature",
-        geometry: { type: "Point", coordinates: [pt.lon, pt.lat] },
-        properties: { w: pt.w }
-      }))
-    };
-
-    if (map.getSource(layerId)) {
-      const src = map.getSource(layerId) as maptilersdk.GeoJSONSource | undefined;
-      src?.setData(geojson as any);
-      map.setLayoutProperty(layerId, "visibility", "visible");
-      return;
-    }
-
-    map.addSource(layerId, { type: "geojson", data: geojson as any });
-    map.addLayer({
-      id: layerId,
-      type: "circle",
-      source: layerId,
-      paint: {
-        "circle-radius": ["interpolate", ["linear"], ["abs", ["get", "w"]], 0, 2, 0.02, 6, 0.05, 12],
-        "circle-color": ["case", [">=", ["get", "w"], 0], "#4aa8ff", "#ff6b6b"],
-        "circle-opacity": 0.6
-      }
-    });
-  }, [currents, monthIndex, showCurrents, mapReady]);
-
-  useEffect(() => {
-    if (!playing) return;
-    const timer = setInterval(() => {
-      setMonthIndex(prev => (prev + 1) % MONTH_COUNT);
-    }, 1200);
-    return () => clearInterval(timer);
-  }, [playing]);
+  const CurrentComponent = COMPONENTS[activeStep].component;
 
   return (
     <MantineProvider theme={theme} defaultColorScheme="dark">
       <Container size="xl" px="md" py="lg">
-        <AppShell padding="md">
-          <AppShell.Header style={{ background: "transparent", borderBottom: "none" }}>
-            <Stack gap={4} p="md">
-              <Title order={2}>Ocean Flow &amp; Whale Presence</Title>
-              <Text c="dimmed" size="sm">
-                Explore observed whale presence, seasonality, and vertical flow (w) currents.
-              </Text>
-            </Stack>
-          </AppShell.Header>
-          <AppShell.Main>
-            <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md">
-              <Stack>
-                <Paper withBorder p="md" radius="lg">
-                  <Stack gap="md">
-                    <Group justify="space-between">
-                      <Title order={4}>Filters</Title>
-                      <Badge variant="light" color="blue">
-                        {formatMonth(monthIndex)}
-                      </Badge>
-                    </Group>
-                    <Select
-                      label="Dataset range"
-                      data={[
-                        { value: "2011_2012", label: "2011–2012 (aligned with ECCO)" },
-                        { value: "2010_2013", label: "2010–2013 (OBIS full)" }
-                      ]}
-                      value={range}
-                      onChange={value => {
-                        if (value === "2011_2012" || value === "2010_2013") setRange(value);
+        <Stack gap="lg">
+          <Title order={1} ta="center">Ocean Flow &amp; Whale Presence</Title>
+          
+          <Box
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "12px",
+              flexWrap: "nowrap",
+              padding: "20px 8px",
+              width: "100%"
+            }}
+          >
+            <ActionIcon
+              variant="filled"
+              size="lg"
+              radius="xl"
+              onClick={prevStep}
+              disabled={activeStep === 0}
+              style={{
+                flexShrink: 0,
+                transition: "all 0.3s ease"
+              }}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m15 18-6-6 6-6" />
+              </svg>
+            </ActionIcon>
+
+            <Box
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "4px",
+                flexWrap: "nowrap",
+                flex: "1 1 auto",
+                overflowX: "auto",
+                scrollbarWidth: "none",
+                msOverflowStyle: "none"
+              }}
+              className="stepper-container"
+            >
+              {COMPONENTS.map((item, index) => {
+              const isActive = index === activeStep;
+              const isCompleted = index < activeStep;
+              
+              return (
+                <Box
+                  key={index}
+                  onClick={() => setActiveStep(index)}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    cursor: "pointer",
+                    transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                    transform: isActive ? "scale(1)" : "scale(0.75)",
+                    opacity: isActive ? 1 : 0.65,
+                    flex: isActive ? "1 1 auto" : "0 0 auto",
+                    minWidth: isActive ? "150px" : "80px",
+                    maxWidth: isActive ? "180px" : "100px",
+                    padding: isActive ? "14px 18px" : "10px 12px",
+                    borderRadius: "12px",
+                    background: isActive
+                      ? "var(--mantine-color-blue-9)"
+                      : isCompleted
+                      ? "var(--mantine-color-blue-7)"
+                      : "var(--mantine-color-dark-6)",
+                    border: isActive
+                      ? "2px solid var(--mantine-color-blue-6)"
+                      : "2px solid transparent",
+                    position: "relative",
+                    boxShadow: isActive
+                      ? "0 4px 12px rgba(37, 99, 235, 0.3)"
+                      : "0 2px 4px rgba(0, 0, 0, 0.1)"
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.transform = "scale(0.85)";
+                      e.currentTarget.style.opacity = "0.8";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.transform = "scale(0.75)";
+                      e.currentTarget.style.opacity = "0.65";
+                    }
+                  }}
+                >
+                  <Box
+                    style={{
+                      width: isActive ? "36px" : "20px",
+                      height: isActive ? "36px" : "20px",
+                      borderRadius: "50%",
+                      background: isActive
+                        ? "var(--mantine-color-blue-6)"
+                        : isCompleted
+                        ? "var(--mantine-color-blue-5)"
+                        : "var(--mantine-color-dark-4)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: isActive ? "10px" : "6px",
+                      transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                      fontWeight: "bold",
+                      fontSize: isActive ? "16px" : "11px",
+                      color: "white",
+                      flexShrink: 0
+                    }}
+                  >
+                    {isCompleted ? "✓" : index + 1}
+                  </Box>
+                  <Text
+                    size={isActive ? "sm" : "xs"}
+                    fw={isActive ? 600 : 400}
+                    ta="center"
+                    style={{
+                      transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                      lineHeight: 1.3,
+                      color: "white",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      width: "100%"
+                    }}
+                  >
+                    {item.label}
+                  </Text>
+                  {index < COMPONENTS.length - 1 && (
+                    <Box
+                      style={{
+                        position: "absolute",
+                        right: "-8px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        width: "12px",
+                        height: "2px",
+                        background: isCompleted || isActive
+                          ? "var(--mantine-color-blue-6)"
+                          : "var(--mantine-color-dark-4)",
+                        transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                        zIndex: 0
                       }}
                     />
-                    <Select
-                      label="Species"
-                      placeholder="All species"
-                      data={speciesOptions.map(s => ({ value: s, label: s }))}
-                      value={species === "All" ? null : species}
-                      onChange={value => setSpecies(value ?? "All")}
-                      searchable
-                      clearable
-                    />
-                    <Stack gap={6}>
-                      <Group justify="space-between">
-                        <Text fw={500}>Time</Text>
-                        <Text size="sm" c="dimmed">
-                          {formatMonth(monthIndex)}
-                        </Text>
-                      </Group>
-                      <Slider
-                        value={monthIndex}
-                        onChange={setMonthIndex}
-                        min={0}
-                        max={MONTH_COUNT - 1}
-                        step={1}
-                        marks={[
-                          { value: 0, label: "Start" },
-                          { value: MONTH_COUNT - 1, label: "End" }
-                        ]}
-                      />
-                      <Group gap="sm">
-                        <Button size="xs" variant="light" onClick={() => setPlaying(p => !p)}>
-                          {playing ? "Pause" : "Play"}
-                        </Button>
-                        <Text size="xs" c="dimmed">
-                          Animates month +/-1 window for whale presence
-                        </Text>
-                      </Group>
-                    </Stack>
-                    <Divider />
-                    <Stack gap="xs">
-                      <Text fw={500}>Layers</Text>
-                      <Switch
-                        checked={showWhales}
-                        label="Whales"
-                        onChange={e => setShowWhales(e.currentTarget.checked)}
-                      />
-                      <Switch
-                        checked={showCurrents}
-                        label="Vertical flow (w)"
-                        onChange={e => setShowCurrents(e.currentTarget.checked)}
-                      />
-                    </Stack>
-                    <Divider />
-                    <Stack gap="xs">
-                      <Text fw={500}>Bookmarks</Text>
-                      <Group gap="xs">
-                        {Object.entries(bookmarks).map(([key, val]) => (
-                          <Button
-                            key={key}
-                            size="xs"
-                            variant="outline"
-                            onClick={() => {
-                              if (!mapRef.current) return;
-                              mapRef.current.flyTo({ center: val.center, zoom: val.zoom, speed: 0.7 });
-                            }}
-                          >
-                            {key === "med" && "Mediterranean"}
-                            {key === "biscay" && "Bay of Biscay"}
-                            {key === "norway" && "Norwegian Sea"}
-                            {key === "northsea" && "North Sea"}
-                            {key === "iceland" && "Iceland"}
-                          </Button>
-                        ))}
-                      </Group>
-                    </Stack>
-                    <Divider />
-                    <Text size="sm" c="dimmed">
-                      OBIS observations are presence records (not tracked individuals). w &gt; 0 indicates
-                      upwelling, w &lt; 0 downwelling. Currents data covers 2011–2012.
-                    </Text>
-                  </Stack>
-                </Paper>
+                  )}
+                </Box>
+              );
+            })}
+            </Box>
 
-                <SimpleGrid cols={1} spacing="md">
-                  <Paper withBorder p="md" radius="lg">
-                    <Stack gap="sm">
-                      <Title order={5}>Seasonality (monthly presence)</Title>
-                      <LineChart
-                        h={220}
-                        data={seasonality}
-                        dataKey="label"
-                        series={[{ name: "count", color: "cyan" }]}
-                      />
-                    </Stack>
-                  </Paper>
-
-                  <Paper withBorder p="md" radius="lg">
-                    <Stack gap="sm">
-                      <Title order={5}>Top species (current filters)</Title>
-                      <BarChart
-                        h={240}
-                        data={speciesChart}
-                        dataKey="species"
-                        series={[{ name: "count", color: "blue.4" }]}
-                      />
-                    </Stack>
-                  </Paper>
-                </SimpleGrid>
-              </Stack>
-
-              <Paper
-                withBorder
-                radius="lg"
-                p="sm"
-                style={{
-                  background: theme.other?.mapBg ?? "#0b1020",
-                  height: "calc(100vh - 180px)",
-                  minHeight: rem(500)
-                }}
+            <ActionIcon
+              variant="filled"
+              size="lg"
+              radius="xl"
+              onClick={nextStep}
+              disabled={activeStep === COMPONENTS.length - 1}
+              style={{
+                flexShrink: 0,
+                transition: "all 0.3s ease"
+              }}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                <div
-                  ref={mapContainerRef}
-                  style={{ width: "100%", height: "100%", borderRadius: rem(12), overflow: "hidden" }}
-                />
-              </Paper>
-            </SimpleGrid>
-          </AppShell.Main>
-        </AppShell>
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+            </ActionIcon>
+          </Box>
 
-        <Stack mt="md" gap="md">
-          <DetailedOverviewBySpecies />
-          <WhaleGuessingGame />
-          <WhalesSalinityTemp />
-          <StatsBySpecies />
-          <WhalePresenceGame />
-          <ExploreTheOceans />
+          <Box
+            style={{
+              minHeight: "60vh",
+              animation: "fadeIn 0.4s ease-in-out"
+            }}
+          >
+            <CurrentComponent />
+          </Box>
         </Stack>
       </Container>
+      <style>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .stepper-container::-webkit-scrollbar {
+          display: none;
+        }
+        .stepper-container {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </MantineProvider>
   );
 }
