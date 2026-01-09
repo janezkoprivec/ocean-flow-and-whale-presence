@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Paper, Stack, Text, Title, Select, MultiSelect, SimpleGrid, Modal, Badge, Group } from "@mantine/core";
+import { Paper, Stack, Text, Title, Select, MultiSelect, SimpleGrid, Badge, Group } from "@mantine/core";
 import "@maptiler/sdk/dist/maptiler-sdk.css";
 import * as maptilersdk from "@maptiler/sdk";
 
@@ -48,16 +48,11 @@ export default function WhalePresence() {
   const mapRef = useRef<maptilersdk.Map | null>(null);
   const mapReadyRef = useRef(false);
   const multiSelectRef = useRef<HTMLInputElement | null>(null);
+  const popupRef = useRef<maptilersdk.Popup | null>(null);
 
   const [regionData, setRegionData] = useState<RegionData | null>(null);
   const [selectedRegion, setSelectedRegion] = useState<string | null>("Europe");
   const [selectedSpecies, setSelectedSpecies] = useState<string[]>([]);
-  const [clickedFeature, setClickedFeature] = useState<{
-    scientificName: string;
-    month: number;
-    year: number;
-    day: number;
-  } | null>(null);
 
   // Load data
   useEffect(() => {
@@ -185,18 +180,64 @@ export default function WhalePresence() {
           map.getCanvas().style.cursor = "";
         });
 
+        // Create popup instance
+        const popup = new maptilersdk.Popup({
+          closeButton: true,
+          closeOnClick: false,
+          anchor: "bottom",
+          offset: [0, -10]
+        });
+        popupRef.current = popup;
+
         // Handle clicks
         map.on("click", "whale-presence", (e) => {
-          if (e.features && e.features.length > 0) {
+          if (e.features && e.features.length > 0 && e.lngLat && popupRef.current) {
             const feature = e.features[0];
             const props = feature.properties;
             if (props) {
-              setClickedFeature({
-                scientificName: props.scientificName || "",
-                month: props.month || 0,
-                year: props.year || 2011,
-                day: props.day || 0
-              });
+              const scientificName = props.scientificName || "";
+              const month = props.month || 0;
+              const year = props.year || 2011;
+              const day = props.day || 0;
+              
+              // Get color from the map - we need to access speciesColorMap
+              // Since this is inside the map.on("load"), we'll need to get it from the closure
+              // For now, we'll calculate it here
+              const color = getSpeciesColor(scientificName);
+              
+              // Create popup content
+              const popupContent = document.createElement("div");
+              popupContent.style.padding = "8px";
+              popupContent.style.minWidth = "200px";
+              
+              const speciesDiv = document.createElement("div");
+              speciesDiv.style.marginBottom = "8px";
+              speciesDiv.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-weight: 500;">Species:</span>
+                  <span style="background-color: ${color}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
+                    ${scientificName}
+                  </span>
+                </div>
+              `;
+              
+              const dateDiv = document.createElement("div");
+              dateDiv.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-weight: 500;">Date:</span>
+                  <span style="font-size: 12px;">
+                    ${MONTH_NAMES[month - 1]} ${day}, ${year}
+                  </span>
+                </div>
+              `;
+              
+              popupContent.appendChild(speciesDiv);
+              popupContent.appendChild(dateDiv);
+              
+              // Set popup content and show at clicked location
+              popupRef.current.setLngLat([e.lngLat.lng, e.lngLat.lat])
+                .setDOMContent(popupContent)
+                .addTo(map);
             }
           }
         });
@@ -208,6 +249,10 @@ export default function WhalePresence() {
 
       return () => {
         mapReadyRef.current = false;
+        if (popupRef.current) {
+          popupRef.current.remove();
+          popupRef.current = null;
+        }
         if (mapRef.current) {
           mapRef.current.remove();
           mapRef.current = null;
@@ -414,34 +459,6 @@ export default function WhalePresence() {
         </SimpleGrid>
       </Stack>
 
-      {/* Modal for clicked feature */}
-      <Modal
-        opened={clickedFeature !== null}
-        onClose={() => setClickedFeature(null)}
-        title="Whale Sighting Details"
-        centered
-      >
-        {clickedFeature && (
-          <Stack gap="md">
-            <Group>
-              <Text fw={500}>Species:</Text>
-              <Badge
-                color={speciesColorMap.get(clickedFeature.scientificName) || "#4aa8ff"}
-                variant="filled"
-                style={{ backgroundColor: speciesColorMap.get(clickedFeature.scientificName) || "#4aa8ff" }}
-              >
-                {clickedFeature.scientificName}
-              </Badge>
-            </Group>
-            <Group>
-              <Text fw={500}>Date:</Text>
-              <Text>
-                {MONTH_NAMES[clickedFeature.month - 1]} {clickedFeature.day}, {clickedFeature.year}
-              </Text>
-            </Group>
-          </Stack>
-        )}
-      </Modal>
     </Paper>
   );
 }
