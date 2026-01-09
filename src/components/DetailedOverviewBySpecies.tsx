@@ -9,21 +9,37 @@ const WHALE_SPECIES = [
     id: "balaenoptera-physalus",
     scientificName: "Balaenoptera physalus",
     commonName: "Fin Whale",
-    description: "The second-largest whale species, known for its streamlined body and distinctive asymmetrical coloration."
+    description: "The second-largest whale species, known for its streamlined body and distinctive asymmetrical coloration.",
+    color: "#4aa8ff" // Blue
   },
   {
     id: "balaenoptera-acutorostrata",
     scientificName: "Balaenoptera acutorostrata",
     commonName: "Minke Whale",
-    description: "The smallest baleen whale, highly acrobatic and commonly observed in coastal waters."
+    description: "The smallest baleen whale, highly acrobatic and commonly observed in coastal waters.",
+    color: "#ff6b6b" // Red
   },
   {
     id: "megaptera-novaeangliae",
     scientificName: "Megaptera novaeangliae",
     commonName: "Humpback Whale",
-    description: "Famous for their long pectoral fins and complex songs, often seen breaching."
+    description: "Famous for their long pectoral fins and complex songs, often seen breaching.",
+    color: "#51cf66" // Green
+  },
+  {
+    id: "all-species",
+    scientificName: "all",
+    commonName: "All Three Species",
+    description: "View all three whale species together on the map.",
+    color: "#4aa8ff" // Default color (not used when showing all)
   }
 ];
+
+// Helper function to get species color by scientific name
+const getSpeciesColor = (scientificName: string): string => {
+  const species = WHALE_SPECIES.find(s => s.scientificName === scientificName);
+  return species?.color || "#4aa8ff";
+};
 
 const MONTHS = [
   "january", "february", "march", "april", "may", "june",
@@ -52,6 +68,13 @@ type WhaleData = {
   [species: string]: SpeciesData;
 };
 
+type CentroidsData = {
+  [month: string]: {
+    lat: number | "null";
+    lon: number | "null";
+  };
+};
+
 function SpeciesDetailView({ 
   species, 
   onSpeciesChange 
@@ -60,6 +83,7 @@ function SpeciesDetailView({
   onSpeciesChange: (id: string) => void;
 }) {
   const [whaleData, setWhaleData] = useState<WhaleData | null>(null);
+  const [centroidsData, setCentroidsData] = useState<CentroidsData | null>(null);
   const [selectedMonth, setSelectedMonth] = useState(0);
   const [envDataType, setEnvDataType] = useState<"temperature" | "salinity">("temperature");
   const [envData, setEnvData] = useState<any>(null);
@@ -78,6 +102,20 @@ function SpeciesDetailView({
         if (!cancelled) setWhaleData(data);
       })
       .catch(err => console.error("Failed to load whale data:", err));
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Load centroids data for all species
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/data/whales_2011_monthly_centroids.json")
+      .then(r => r.json())
+      .then((data: CentroidsData) => {
+        if (!cancelled) setCentroidsData(data);
+      })
+      .catch(err => console.error("Failed to load centroids data:", err));
     return () => {
       cancelled = true;
     };
@@ -123,7 +161,7 @@ function SpeciesDetailView({
           source: "whale-occurrences",
           paint: {
             "circle-radius": 6,
-            "circle-color": "#4aa8ff",
+            "circle-color": ["get", "speciesColor"],
             "circle-stroke-color": "#fff",
             "circle-stroke-width": 1.5,
             "circle-opacity": 0.8
@@ -176,18 +214,36 @@ function SpeciesDetailView({
         let bounds = mapBoundsRef.current;
         
         if (!bounds && whaleData) {
-          const speciesData = whaleData[species.scientificName];
-          if (speciesData) {
-            const monthName = MONTHS[selectedMonth];
-            const monthData = speciesData[monthName];
-            if (monthData?.centroid) {
-              bounds = {
-                min_lon: Math.max(-180, monthData.centroid.lon - 20),
-                max_lon: Math.min(180, monthData.centroid.lon + 20),
-                min_lat: Math.max(-90, monthData.centroid.lat - 15),
-                max_lat: Math.min(90, monthData.centroid.lat + 15)
+          const monthName = MONTHS[selectedMonth];
+          let centroid: { lon: number; lat: number } | null = null;
+          
+          if (species.scientificName === "all" && centroidsData) {
+            // Use centroids from the JSON file for all species
+            const monthCentroid = centroidsData[monthName];
+            if (monthCentroid && monthCentroid.lat !== "null" && monthCentroid.lon !== "null") {
+              centroid = {
+                lon: monthCentroid.lon as number,
+                lat: monthCentroid.lat as number
               };
             }
+          } else {
+            // Use individual species centroid
+            const speciesData = whaleData[species.scientificName];
+            if (speciesData) {
+              const monthData = speciesData[monthName];
+              if (monthData?.centroid) {
+                centroid = monthData.centroid;
+              }
+            }
+          }
+          
+          if (centroid) {
+            bounds = {
+              min_lon: Math.max(-180, centroid.lon - 20),
+              max_lon: Math.min(180, centroid.lon + 20),
+              min_lat: Math.max(-90, centroid.lat - 15),
+              max_lat: Math.min(90, centroid.lat + 15)
+            };
           }
         }
         
@@ -230,7 +286,7 @@ function SpeciesDetailView({
     return () => {
       cancelled = true;
     };
-  }, [whaleData, species, selectedMonth, envDataType]);
+  }, [whaleData, centroidsData, species, selectedMonth, envDataType]);
 
   // Add environmental data heatmap to map
   useEffect(() => {
@@ -358,60 +414,167 @@ function SpeciesDetailView({
     if (!mapReadyRef.current || !mapRef.current || !whaleData) return;
     
     const map = mapRef.current;
-    const speciesData = whaleData[species.scientificName];
-    if (!speciesData) return;
-
     const monthName = MONTHS[selectedMonth];
-    const monthData = speciesData[monthName];
     
-    if (!monthData) return;
+    let occurrences: Array<{ lon: number; lat: number; speciesName?: string }> = [];
+    let centroid: { lon: number; lat: number } | null = null;
 
-    // Update occurrences on map
+    if (species.scientificName === "all") {
+      // Combine occurrences from all three species with species info
+      const allSpeciesNames = WHALE_SPECIES
+        .filter(s => s.scientificName !== "all")
+        .map(s => s.scientificName);
+      
+      for (const speciesName of allSpeciesNames) {
+        const speciesData = whaleData[speciesName];
+        if (speciesData) {
+          const monthData = speciesData[monthName];
+          if (monthData?.occurences) {
+            // Add species name to each occurrence
+            const speciesOccurrences = monthData.occurences.map(occ => ({
+              ...occ,
+              speciesName
+            }));
+            occurrences = occurrences.concat(speciesOccurrences);
+          }
+        }
+      }
+      
+      // Use centroid from centroidsData
+      if (centroidsData) {
+        const monthCentroid = centroidsData[monthName];
+        if (monthCentroid && monthCentroid.lat !== "null" && monthCentroid.lon !== "null") {
+          centroid = {
+            lon: monthCentroid.lon as number,
+            lat: monthCentroid.lat as number
+          };
+        }
+      }
+    } else {
+      // Use individual species data
+      const speciesData = whaleData[species.scientificName];
+      if (!speciesData) return;
+
+      const monthData = speciesData[monthName];
+      if (!monthData) return;
+
+      occurrences = monthData.occurences.map(occ => ({
+        ...occ,
+        speciesName: species.scientificName
+      }));
+      centroid = monthData.centroid;
+    }
+
+    // Update occurrences on map with color information
     const geojson = {
       type: "FeatureCollection",
-      features: monthData.occurences.map(occ => ({
+      features: occurrences.map(occ => ({
         type: "Feature",
         geometry: { type: "Point", coordinates: [occ.lon, occ.lat] },
-        properties: {}
+        properties: {
+          speciesColor: occ.speciesName ? getSpeciesColor(occ.speciesName) : "#4aa8ff"
+        }
       }))
     };
 
     const src = map.getSource("whale-occurrences") as maptilersdk.GeoJSONSource | undefined;
-    src?.setData(geojson as any);
+    if (src) {
+      src.setData(geojson as any);
+      console.log(`✅ Updated map with ${occurrences.length} occurrences for ${species.commonName}`);
+    } else {
+      console.warn("⚠️ Whale occurrences source not found");
+    }
 
     // Fly to centroid if available
-    if (monthData.centroid) {
+    if (centroid) {
       map.flyTo({
-        center: [monthData.centroid.lon, monthData.centroid.lat],
+        center: [centroid.lon, centroid.lat],
         zoom: 2,
         speed: 0.8
       });
     }
-  }, [whaleData, species, selectedMonth]);
+  }, [whaleData, centroidsData, species, selectedMonth]);
 
   // Prepare chart data
   const { temperatureData, salinityData } = useMemo(() => {
     if (!whaleData) return { temperatureData: [], salinityData: [] };
-    
-    const speciesData = whaleData[species.scientificName];
-    if (!speciesData) return { temperatureData: [], salinityData: [] };
 
     const tempData = MONTHS.map((month, idx) => {
-      const monthData = speciesData[month];
-      const temp = monthData?.mean_temperature;
+      let temperature = 0;
+      
+      if (species.scientificName === "all") {
+        // Average temperature across all three species
+        const allSpeciesNames = WHALE_SPECIES
+          .filter(s => s.scientificName !== "all")
+          .map(s => s.scientificName);
+        
+        const temps: number[] = [];
+        for (const speciesName of allSpeciesNames) {
+          const speciesData = whaleData[speciesName];
+          if (speciesData) {
+            const monthData = speciesData[month];
+            const temp = monthData?.mean_temperature;
+            if (temp && temp !== "null") {
+              temps.push(temp.mean);
+            }
+          }
+        }
+        
+        if (temps.length > 0) {
+          temperature = temps.reduce((sum, t) => sum + t, 0) / temps.length;
+        }
+      } else {
+        const speciesData = whaleData[species.scientificName];
+        if (speciesData) {
+          const monthData = speciesData[month];
+          const temp = monthData?.mean_temperature;
+          temperature = temp && temp !== "null" ? temp.mean : 0;
+        }
+      }
+      
       return {
         month: MONTH_LABELS[idx],
-        temperature: temp && temp !== "null" ? temp.mean : 0,
+        temperature,
         isCurrentMonth: idx === selectedMonth
       };
     });
 
     const salData = MONTHS.map((month, idx) => {
-      const monthData = speciesData[month];
-      const sal = monthData?.mean_salinity;
+      let salinity = 0;
+      
+      if (species.scientificName === "all") {
+        // Average salinity across all three species
+        const allSpeciesNames = WHALE_SPECIES
+          .filter(s => s.scientificName !== "all")
+          .map(s => s.scientificName);
+        
+        const sals: number[] = [];
+        for (const speciesName of allSpeciesNames) {
+          const speciesData = whaleData[speciesName];
+          if (speciesData) {
+            const monthData = speciesData[month];
+            const sal = monthData?.mean_salinity;
+            if (sal && sal !== "null") {
+              sals.push(sal.mean);
+            }
+          }
+        }
+        
+        if (sals.length > 0) {
+          salinity = sals.reduce((sum, s) => sum + s, 0) / sals.length;
+        }
+      } else {
+        const speciesData = whaleData[species.scientificName];
+        if (speciesData) {
+          const monthData = speciesData[month];
+          const sal = monthData?.mean_salinity;
+          salinity = sal && sal !== "null" ? sal.mean : 0;
+        }
+      }
+      
       return {
         month: MONTH_LABELS[idx],
-        salinity: sal && sal !== "null" ? sal.mean : 0,
+        salinity,
         isCurrentMonth: idx === selectedMonth
       };
     });
@@ -426,16 +589,31 @@ function SpeciesDetailView({
         <Group justify="space-between" wrap="nowrap">
           <Title order={4}>{species.commonName}</Title>
           <Group gap="xs">
-            {WHALE_SPECIES.map((s) => (
-              <Button
-                key={s.id}
-                size="xs"
-                variant={s.id === species.id ? "filled" : "light"}
-                onClick={() => onSpeciesChange(s.id)}
-              >
-                {s.commonName}
-              </Button>
-            ))}
+            {WHALE_SPECIES.map((s) => {
+              // Only show color indicator for individual species (not "all")
+              const showColor = s.scientificName !== "all";
+              return (
+                <Button
+                  key={s.id}
+                  size="xs"
+                  variant={s.id === species.id ? "filled" : "light"}
+                  onClick={() => onSpeciesChange(s.id)}
+                  leftSection={showColor ? (
+                    <div
+                      style={{
+                        width: 12,
+                        height: 12,
+                        borderRadius: "50%",
+                        backgroundColor: s.color,
+                        border: "1px solid rgba(255, 255, 255, 0.3)"
+                      }}
+                    />
+                  ) : undefined}
+                >
+                  {s.commonName}
+                </Button>
+              );
+            })}
           </Group>
         </Group>
 
@@ -607,43 +785,60 @@ export default function DetailedOverviewBySpecies() {
           </Title>
         </Stack>
 
-        <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="lg" w="100%">
-          {WHALE_SPECIES.map((species) => (
-            <Card
-              key={species.id}
-              shadow="md"
-              padding="lg"
-              radius="md"
-              style={{ cursor: "pointer", transition: "transform 0.2s" }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-4px)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-              }}
-              onClick={() => setSelectedSpecies(species.id)}
-            >
-              <Card.Section>
-                <Image
-                  src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&auto=format&fit=crop"
-                  height={200}
-                  alt={species.commonName}
-                />
-              </Card.Section>
+        <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing="lg" w="100%">
+          {WHALE_SPECIES.map((species) => {
+            const showColor = species.scientificName !== "all";
+            return (
+              <Card
+                key={species.id}
+                shadow="md"
+                padding="lg"
+                radius="md"
+                style={{ cursor: "pointer", transition: "transform 0.2s" }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-4px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                }}
+                onClick={() => setSelectedSpecies(species.id)}
+              >
+                <Card.Section>
+                  <Image
+                    src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&auto=format&fit=crop"
+                    height={200}
+                    alt={species.commonName}
+                  />
+                </Card.Section>
 
-              <Stack gap="xs" mt="md">
-                <Text fw={600} size="lg">
-                  {species.commonName}
-                </Text>
-                <Text size="sm" c="dimmed">
-                  {species.scientificName}
-                </Text>
-                <Text size="sm" lineClamp={3}>
-                  {species.description}
-                </Text>
-              </Stack>
-            </Card>
-          ))}
+                <Stack gap="xs" mt="md">
+                  <Group gap="xs" align="center">
+                    <Text fw={600} size="lg">
+                      {species.commonName}
+                    </Text>
+                    {showColor && (
+                      <div
+                        style={{
+                          width: 16,
+                          height: 16,
+                          borderRadius: "50%",
+                          backgroundColor: species.color,
+                          border: "2px solid rgba(255, 255, 255, 0.5)",
+                          flexShrink: 0
+                        }}
+                      />
+                    )}
+                  </Group>
+                  <Text size="sm" c="dimmed">
+                    {species.scientificName}
+                  </Text>
+                  <Text size="sm" lineClamp={3}>
+                    {species.description}
+                  </Text>
+                </Stack>
+              </Card>
+            );
+          })}
         </SimpleGrid>
 
         <Text size="sm" c="rgba(255,255,255,0.8)" ta="center" maw={800} px="md">
