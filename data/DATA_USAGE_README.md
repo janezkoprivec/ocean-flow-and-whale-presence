@@ -136,3 +136,8 @@ This dataset is used in visualizations where whales are filtered and displayed b
   ]
 }
 ```
+## species_stats_2011_merged.json
+
+This file summarizes cetacean species observed in 2011 by aggregating whale and dolphin occurrences based on their scientific names. Each entry represents a single species and includes its scientific name, common name, total number of sightings, and a short descriptive text.
+
+The dataset can be searched by either scientific name or common species name to retrieve occurrence statistics and descriptive information. It is intended for use in visualizations and interactive features that explore cetacean presence patterns.
