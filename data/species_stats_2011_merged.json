@@ -1,0 +1,158 @@
+[
+  {
+    "species": "Harbor porpoise",
+    "scientific_name": "Phocoena phocoena",
+    "count_2011": 1132,
+    "description": "The harbor porpoise is a small coastal cetacean commonly found in temperate and subpolar waters. It prefers shallow seas and is one of the most frequently observed cetaceans in European waters."
+  },
+  {
+    "species": "Striped dolphin",
+    "scientific_name": "Stenella coeruleoalba",
+    "count_2011": 695,
+    "description": "The striped dolphin is a fast-swimming pelagic species typically found in warm and temperate offshore waters. It is known for its distinctive body stripes and highly social behavior."
+  },
+  {
+    "species": "Short-beaked common dolphin",
+    "scientific_name": "Delphinus delphis",
+    "count_2011": 531,
+    "description": "The short-beaked common dolphin is a highly social species occurring in large groups. It is widely distributed in temperate and tropical waters and often associated with productive ocean regions."
+  },
+  {
+    "species": "Common bottlenose dolphin",
+    "scientific_name": "Tursiops truncatus",
+    "count_2011": 344,
+    "description": "The common bottlenose dolphin is a highly intelligent and adaptable species found in both coastal and offshore habitats. It is one of the best-studied cetaceans worldwide."
+  },
+  {
+    "species": "Fin whale",
+    "scientific_name": "Balaenoptera physalus",
+    "count_2011": 256,
+    "description": "The fin whale is a large baleen whale commonly found in deep offshore waters. It feeds primarily on small schooling fish and krill and undertakes long seasonal migrations."
+  },
+  {
+    "species": "Common minke whale",
+    "scientific_name": "Balaenoptera acutorostrata",
+    "count_2011": 252,
+    "description": "The common minke whale is a small and agile baleen whale species. It is widely distributed across temperate and polar waters and frequently observed in the North Atlantic."
+  },
+  {
+    "species": "Common dolphins",
+    "scientific_name": "Delphinus",
+    "count_2011": 131,
+    "description": "This taxonomic group represents dolphins of the genus Delphinus. These dolphins are typically found in productive offshore regions and are known for their energetic behavior."
+  },
+  {
+    "species": "White-beaked dolphin",
+    "scientific_name": "Lagenorhynchus albirostris",
+    "count_2011": 234,
+    "description": "The white-beaked dolphin is a cold-water species commonly found in the North Atlantic. It prefers shelf and slope waters and is often observed in small groups."
+  },
+  {
+    "species": "Humpback whale",
+    "scientific_name": "Megaptera novaeangliae",
+    "count_2011": 130,
+    "description": "The humpback whale is known for its acrobatic breaching behavior and complex songs. It migrates long distances between high-latitude feeding areas and low-latitude breeding grounds."
+  },
+  {
+    "species": "Sperm whale",
+    "scientific_name": "Physeter macrocephalus",
+    "count_2011": 93,
+    "description": "The sperm whale is the largest toothed whale and an extreme deep-diving species. It primarily feeds on squid and inhabits deep ocean environments."
+  },
+  {
+    "species": "Killer whale",
+    "scientific_name": "Orcinus orca",
+    "count_2011": 80,
+    "description": "The killer whale is a top marine predator found in all oceans. It exhibits complex social structures and diverse feeding strategies depending on the population."
+  },
+  {
+    "species": "Long-finned pilot whale",
+    "scientific_name": "Globicephala melas",
+    "count_2011": 73,
+    "description": "The long-finned pilot whale is a highly social species that forms strong group bonds. It is commonly found in temperate and subpolar deep waters."
+  },
+  {
+    "species": "Spinner dolphins",
+    "scientific_name": "Stenella",
+    "count_2011": 56,
+    "description": "This group includes dolphins known for their spinning leaps out of the water. They are typically found in warm offshore waters and form large social groups."
+  },
+  {
+    "species": "Toothed whales",
+    "scientific_name": "Odontoceti",
+    "count_2011": 52,
+    "description": "Odontoceti is a suborder of cetaceans characterized by the presence of teeth. These species rely heavily on echolocation for navigation and hunting."
+  },
+  {
+    "species": "Blue whale",
+    "scientific_name": "Balaenoptera musculus",
+    "count_2011": 44,
+    "description": "The blue whale is the largest animal ever known to have lived on Earth. It feeds almost exclusively on krill and inhabits deep ocean waters."
+  },
+  {
+    "species": "Risso's dolphin",
+    "scientific_name": "Grampus griseus",
+    "count_2011": 30,
+    "description": "Risso's dolphin is a robust dolphin species with a heavily scarred body. It primarily feeds on squid and prefers deep offshore waters."
+  },
+  {
+    "species": "Northern bottlenose whale",
+    "scientific_name": "Hyperoodon ampullatus",
+    "count_2011": 23,
+    "description": "The northern bottlenose whale is a deep-diving beaked whale species. It is mainly found in cold North Atlantic waters and feeds on deep-sea squid."
+  },
+  {
+    "species": "Cuvier's beaked whale",
+    "scientific_name": "Ziphius cavirostris",
+    "count_2011": 11,
+    "description": "Cuvier's beaked whale is known for record-breaking dive depths among marine mammals. It typically inhabits deep offshore and slope waters."
+  },
+  {
+    "species": "Atlantic white-sided dolphin",
+    "scientific_name": "Leucopleurus acutus",
+    "count_2011": 5,
+    "description": "The Atlantic white-sided dolphin is a fast and energetic species found in cold temperate waters. It is commonly observed in the North Atlantic."
+  },
+  {
+    "species": "Black sea harbor porpoise",
+    "scientific_name": "Phocoena phocoena relicta",
+    "count_2011": 5,
+    "description": "This subspecies of harbor porpoise is endemic to the Black Sea. It inhabits coastal waters and is considered vulnerable due to human impacts."
+  },
+  {
+    "species": "Sei whale",
+    "scientific_name": "Balaenoptera borealis",
+    "count_2011": 4,
+    "description": "The sei whale is a fast-swimming baleen whale typically found in offshore waters. It feeds on plankton and small fish and migrates seasonally."
+  },
+  {
+    "species": "Black sea bottlenose dolphin",
+    "scientific_name": "Tursiops truncatus ponticus",
+    "count_2011": 3,
+    "description": "This subspecies of bottlenose dolphin is native to the Black Sea. It occupies coastal habitats and is adapted to lower salinity conditions."
+  },
+  {
+    "species": "Beluga whale",
+    "scientific_name": "Delphinapterus leucas",
+    "count_2011": 2,
+    "description": "The beluga whale is a white-colored cetacean adapted to Arctic and sub-Arctic environments. It is known for its vocal behavior and social nature."
+  },
+  {
+    "species": "Beaked whales",
+    "scientific_name": "Ziphiidae",
+    "count_2011": 2,
+    "description": "Beaked whales are a family of deep-diving cetaceans that are rarely observed at the surface. They primarily feed on deep-sea squid."
+  },
+  {
+    "species": "Short-finned pilot whale",
+    "scientific_name": "Globicephala macrorhynchus",
+    "count_2011": 1,
+    "description": "The short-finned pilot whale is a tropical and subtropical species. It forms tight social groups and feeds mainly on squid."
+  },
+  {
+    "species": "False killer whale",
+    "scientific_name": "Pseudorca crassidens",
+    "count_2011": 1,
+    "description": "The false killer whale is a large oceanic dolphin species. It is a powerful predator that inhabits warm offshore waters."
+  }
+]
