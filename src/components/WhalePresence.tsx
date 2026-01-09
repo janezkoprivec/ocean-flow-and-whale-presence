@@ -189,7 +189,7 @@ export default function WhalePresence() {
         });
         popupRef.current = popup;
 
-        // Handle clicks
+        // Handle clicks on whale features
         map.on("click", "whale-presence", (e) => {
           if (e.features && e.features.length > 0 && e.lngLat && popupRef.current) {
             const feature = e.features[0];
@@ -239,6 +239,19 @@ export default function WhalePresence() {
                 .setDOMContent(popupContent)
                 .addTo(map);
             }
+          }
+        });
+
+        // Close popup when clicking outside of features
+        map.on("click", (e) => {
+          // Check if the click was on a feature
+          const features = map.queryRenderedFeatures(e.point, {
+            layers: ["whale-presence"]
+          });
+          
+          // If no features were clicked and popup is open, close it
+          if (features.length === 0 && popupRef.current) {
+            popupRef.current.remove();
           }
         });
       });
