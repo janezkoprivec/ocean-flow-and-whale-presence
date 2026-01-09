@@ -1,0 +1,122 @@
+{
+  "january": {
+    "world": {
+      "mean_temperature": 13.850968394800013,
+      "mean_salinity": 34.125955736613996
+    },
+    "europe": {
+      "mean_temperature": 9.36508910197064,
+      "mean_salinity": 33.27258990778585
+    }
+  },
+  "february": {
+    "world": {
+      "mean_temperature": 14.003757343233346,
+      "mean_salinity": 34.16440189317247
+    },
+    "europe": {
+      "mean_temperature": 8.880961204850307,
+      "mean_salinity": 33.266346837357624
+    }
+  },
+  "march": {
+    "world": {
+      "mean_temperature": 13.970163731310887,
+      "mean_salinity": 34.1885450611774
+    },
+    "europe": {
+      "mean_temperature": 8.742307676205714,
+      "mean_salinity": 33.23524845004439
+    }
+  },
+  "april": {
+    "world": {
+      "mean_temperature": 13.857657877222474,
+      "mean_salinity": 34.195879265391696
+    },
+    "europe": {
+      "mean_temperature": 9.823850993982278,
+      "mean_salinity": 33.19223507102186
+    }
+  },
+  "may": {
+    "world": {
+      "mean_temperature": 13.769061457505952,
+      "mean_salinity": 34.18212916177661
+    },
+    "europe": {
+      "mean_temperature": 11.868057162163426,
+      "mean_salinity": 33.10552267213867
+    }
+  },
+  "june": {
+    "world": {
+      "mean_temperature": 13.82269990450888,
+      "mean_salinity": 34.03335887552739
+    },
+    "europe": {
+      "mean_temperature": 14.327028989630627,
+      "mean_salinity": 33.05371729140738
+    }
+  },
+  "july": {
+    "world": {
+      "mean_temperature": 14.047525919046077,
+      "mean_salinity": 33.86341757407794
+    },
+    "europe": {
+      "mean_temperature": 16.53059055320709,
+      "mean_salinity": 33.02036558541346
+    }
+  },
+  "august": {
+    "world": {
+      "mean_temperature": 14.221916386448559,
+      "mean_salinity": 33.84681780396616
+    },
+    "europe": {
+      "mean_temperature": 17.329641535927195,
+      "mean_salinity": 33.050418854165
+    }
+  },
+  "september": {
+    "world": {
+      "mean_temperature": 14.088161926886713,
+      "mean_salinity": 33.91170395787801
+    },
+    "europe": {
+      "mean_temperature": 16.760605204175985,
+      "mean_salinity": 33.130271498657976
+    }
+  },
+  "october": {
+    "world": {
+      "mean_temperature": 13.79878520174425,
+      "mean_salinity": 33.981585096739515
+    },
+    "europe": {
+      "mean_temperature": 14.752677824631276,
+      "mean_salinity": 33.2253867438835
+    }
+  },
+  "november": {
+    "world": {
+      "mean_temperature": 13.615286837904819,
+      "mean_salinity": 34.047272023408624
+    },
+    "europe": {
+      "mean_temperature": 12.729860159112905,
+      "mean_salinity": 33.23958618670279
+    }
+  },
+  "december": {
+    "world": {
+      "mean_temperature": 13.62050835036106,
+      "mean_salinity": 34.08627237117129
+    },
+    "europe": {
+      "mean_temperature": 10.92266006609987,
+      "mean_salinity": 33.34765892358374
+    }
+  }
+}

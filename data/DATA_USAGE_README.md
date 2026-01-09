@@ -142,6 +142,76 @@ This dataset is used in visualizations where whales are filtered and displayed b
   ]
 }
 ```
+
+## europe_world_monthly_temperature_salinity.json
+
+This file contains monthly average temperature and salinity data for the year 2011, organized by geographic region (world and Europe). The dataset provides baseline environmental conditions that can be compared against whale-specific temperature and salinity measurements to understand how whale presence relates to oceanographic conditions.
+
+### Structure
+
+The JSON structure is organized by month:
+- **Top level**: Month names (january, february, march, ..., december)
+- **Second level**: Region names ("world" and "europe")
+- **Region level**: Contains the following data:
+  - `mean_temperature`: float32 - Mean sea surface temperature (°C) for the region in that month
+  - `mean_salinity`: float32 - Mean sea surface salinity (PSU) for the region in that month
+
+### Regional Boundaries
+
+- **World**: 
+  - Latitude: -90° to 90° (global coverage)
+  - Longitude: -180° to 180° (global coverage)
+  - Data fetched with stride 8 for computational efficiency
+  
+- **Europe**: 
+  - Latitude: 29° to 72°
+  - Longitude: -15° to 45°
+  - Data fetched with stride 4 for computational efficiency
+
+### Data Processing
+
+The data was computed by:
+1. Fetching oceanographic data from the ECCO dataset via API calls
+2. Using spatial subsetting with specified strides to manage data volume
+3. Computing mean values across all valid data points within each region for each month
+4. Aggregating temperature (variable: "thetao") and salinity (variable: "so") at depth 0 (sea surface)
+
+### Usage
+
+This dataset is used in visualizations to:
+1. Display baseline environmental conditions for comparison with whale-specific measurements
+2. Show seasonal trends in temperature and salinity across different regions
+3. Provide context for understanding whale distribution patterns relative to oceanographic conditions
+4. Enable comparative analysis between global and European regional conditions
+
+### Example Structure
+
+```json
+{
+  "january": {
+    "world": {
+      "mean_temperature": 13.850968394800013,
+      "mean_salinity": 34.125955736613996
+    },
+    "europe": {
+      "mean_temperature": 9.36508910197064,
+      "mean_salinity": 33.27258990778585
+    }
+  },
+  "february": {
+    "world": {
+      "mean_temperature": 14.003757343233346,
+      "mean_salinity": 34.16440189317247
+    },
+    "europe": {
+      "mean_temperature": 8.880961204850307,
+      "mean_salinity": 33.266346837357624
+    }
+  },
+  // ... other months through december
+}
+```
+
 ## species_stats_2011_merged.json
 
 This file summarizes cetacean species observed in 2011 by aggregating whale and dolphin occurrences based on their scientific names. Each entry represents a single species and includes its scientific name, common name, total number of sightings, and a short descriptive text.
