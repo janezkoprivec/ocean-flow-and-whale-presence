@@ -97,6 +97,8 @@ The JSON structure is organized by region:
   - `year`: int - The year of the occurrence (2011)
   - `month`: int - The month of the occurrence (1-12)
   - `day`: int - The day of the occurrence (1-31)
+  - `lon`: float32 - The longitude coordinate of the whale occurrence
+  - `lat`: float32 - The latitude coordinate of the whale occurrence
 
 ### Regional Boundaries
 
@@ -110,7 +112,7 @@ The JSON structure is organized by region:
 
 ### Usage
 
-This dataset is used in visualizations where whales are filtered and displayed based on the ocean/region they were spotted in. The regional boundaries are defined by the latitude and longitude coordinates of each whale occurrence.
+This dataset is used in visualizations where whales are filtered and displayed based on the ocean/region they were spotted in. The regional boundaries are defined by the latitude and longitude coordinates of each whale occurrence. The `lat` and `lon` fields in each occurrence object can be used to visualize whale locations on a map.
 
 ### Example Structure
 
@@ -121,7 +123,9 @@ This dataset is used in visualizations where whales are filtered and displayed b
       "scientificName": "Tursiops truncatus",
       "year": 2011,
       "month": 7,
-      "day": 29
+      "day": 29,
+      "lon": -1.8803,
+      "lat": 48.70619
     },
     // ... more whale occurrences in Europe
   ],
@@ -130,7 +134,9 @@ This dataset is used in visualizations where whales are filtered and displayed b
       "scientificName": "Balaenoptera physalus",
       "year": 2011,
       "month": 9,
-      "day": 8
+      "day": 8,
+      "lon": -45.1234,
+      "lat": 55.6789
     },
     // ... more whale occurrences in North Atlantic
   ]
