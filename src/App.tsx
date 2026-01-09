@@ -26,7 +26,7 @@ import { theme } from "./theme";
 import WhaleGuessingGame from "./components/WhaleGuessingGame";
 import WhalesSalinityTemp from "./components/WhalesSalinityTemp";
 import StatsBySpecies from "./components/StatsBySpecies";
-import WhalePresenceGame from "./components/WhalePresenceGame";
+import WhalePresenceGame from "./components/WhalePresence";
 import ExploreTheOceans from "./components/ExploreTheOceans";
 import DetailedOverviewBySpecies from "./components/DetailedOverviewBySpecies";
 
