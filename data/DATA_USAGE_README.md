@@ -212,6 +212,56 @@ This dataset is used in visualizations to:
 }
 ```
 
+## whales_2011_monthly_centroids.json
+
+This file contains monthly centroid coordinates (mean latitude and longitude) aggregated from all whale occurrences in the `df_2011_filtered` dataset for the year 2011. The dataset provides a single representative location point for each month, calculated as the mean of all whale occurrence coordinates for that month. This is useful for visualizing the general geographic distribution trend of whale sightings throughout the year.
+
+### Structure
+
+The JSON structure is organized by month:
+- **Top level**: Month names (january, february, march, ..., december)
+- **Month level**: Contains the following data:
+  - `lat`: float32 - Mean latitude coordinate of all whale occurrences for that month. **Note**: Can be `null` (represented as the string "null" in JSON, which is equivalent to NaN) if there are no occurrences for that month.
+  - `lon`: float32 - Mean longitude coordinate of all whale occurrences for that month. **Note**: Can be `null` (represented as the string "null" in JSON, which is equivalent to NaN) if there are no occurrences for that month.
+
+### Data Processing
+
+The centroids are computed by:
+1. Filtering the `df_2011_filtered` dataset (which contains the top 3 whale species: Balaenoptera acutorostrata, Balaenoptera physalus, and Megaptera novaeangliae)
+2. Grouping all occurrences by month
+3. Calculating the arithmetic mean of all latitude and longitude coordinates for each month
+
+### Usage
+
+This dataset is used in visualizations to:
+1. Display the general geographic center of whale activity for each month
+2. Show seasonal migration patterns through centroid movement
+3. Provide a single representative point for camera positioning or map centering per month
+
+### Special Cases
+
+- **January**: There are no datapoints for January, so both `lat` and `lon` are set to `null` (represented as the string "null" in JSON, which is equivalent to NaN).
+
+### Example Structure
+
+```json
+{
+  "january": {
+    "lat": "null",
+    "lon": "null"
+  },
+  "february": {
+    "lat": 59.943217833333335,
+    "lon": 4.342177833333333
+  },
+  "march": {
+    "lat": 66.804952,
+    "lon": 14.101423999999998
+  },
+  // ... other months through december
+}
+```
+
 ## species_stats_2011_merged.json
 
 This file summarizes cetacean species observed in 2011 by aggregating whale and dolphin occurrences based on their scientific names. Each entry represents a single species and includes its scientific name, common name, total number of sightings, and a short descriptive text.
