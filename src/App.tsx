@@ -28,6 +28,7 @@ import WhalesSalinityTemp from "./components/WhalesSalinityTemp";
 import StatsBySpecies from "./components/StatsBySpecies";
 import WhalePresenceGame from "./components/WhalePresenceGame";
 import ExploreTheOceans from "./components/ExploreTheOceans";
+import DetailedOverviewBySpecies from "./components/DetailedOverviewBySpecies";
 
 type WhaleFeature = {
   type: "Feature";
@@ -481,6 +482,7 @@ export default function App() {
         </AppShell>
 
         <Stack mt="md" gap="md">
+          <DetailedOverviewBySpecies />
           <WhaleGuessingGame />
           <WhalesSalinityTemp />
           <StatsBySpecies />
