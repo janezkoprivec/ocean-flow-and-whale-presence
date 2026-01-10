@@ -1,7 +1,8 @@
 import { createTheme } from "@mantine/core";
+import "./fonts.css";
 
 export const theme = createTheme({
-  fontFamily: "Inter, system-ui, -apple-system, Segoe UI, sans-serif",
+  fontFamily: "Inter, system-ui, -apple-system, Segoe UI, sans-serif, Aquaphonic-Drought",
   defaultRadius: "md",
   primaryColor: "blue",
   defaultGradient: { from: "cyan", to: "blue", deg: 135 },

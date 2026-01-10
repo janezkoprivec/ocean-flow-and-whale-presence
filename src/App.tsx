@@ -9,7 +9,8 @@ import {
   Stack,
   Title,
   Text,
-  Box
+  Box,
+  rem
 } from "@mantine/core";
 import { theme } from "./theme";
 import OceanFlowMap from "./components/OceanFlowMap";
@@ -45,10 +46,22 @@ export default function App() {
 
   return (
     <MantineProvider theme={theme} defaultColorScheme="dark">
+      <Box w="100%" py="lg">
+        <Title
+          ta="center"
+          m={0}
+          style={{
+            fontSize: 96,
+            color: "white",
+            fontFamily: "Molen Friend Demo"
+          }}
+        >
+          Ocean Flow &amp; Whale Presence
+        </Title>
+      </Box>
+
       <Container size="xl" px="md" py="lg">
-        <Stack gap="lg">
-          <Title order={1} ta="center">Ocean Flow &amp; Whale Presence</Title>
-          
+        <Stack gap={0}>
           <Box
             style={{
               display: "flex",

@@ -1,0 +1,18 @@
+@font-face {
+    font-family: "Aquaphonic-Drought";
+    src: url("/fonts/Aquaphonic-Drought.otf") format("opentype");
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: "Aquaphonic-Downpour";
+    src: url("/fonts/Aquaphonic-Downpour.otf") format("opentype");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Molen Friend Demo";
+    src: url("/fonts/Molen Friend Demo.otf") format("opentype");
+    font-display: swap;
+  }
+  

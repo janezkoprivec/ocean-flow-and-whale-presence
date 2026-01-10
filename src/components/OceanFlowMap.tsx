@@ -9,12 +9,14 @@ import {
   rem,
   Select,
   SimpleGrid,
+  Grid,
   Slider,
   Stack,
   Switch,
   Text,
   Title
 } from "@mantine/core";
+
 import { LineChart, BarChart } from "@mantine/charts";
 import * as maptilersdk from "@maptiler/sdk";
 import { theme } from "../theme";
@@ -312,42 +314,20 @@ export default function OceanFlowMap() {
   return (
     <AppShell padding="md">
       <AppShell.Main>
-        <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md">
-          <Stack>
-            <Paper withBorder p="md" radius="lg">
-              <Stack gap="md">
+        <Grid gutter="xs">
+          <Grid.Col span={{ base: 12, md: 4 }}>
+            <Stack>
+              <Paper p="md" radius="lg">
+                <Stack gap="md" c="white">
                 <Group justify="space-between">
-                  <Title order={4}>Filters</Title>
-                  <Badge variant="light" color="blue">
-                    {formatMonth(monthIndex)}
-                  </Badge>
+                  <Title order={2} c="white">Filters</Title>
                 </Group>
-                <Select
-                  label="Dataset range"
-                  data={[
-                    { value: "2011_2012", label: "2011–2012 (aligned with ECCO)" },
-                    { value: "2010_2013", label: "2010–2013 (OBIS full)" }
-                  ]}
-                  value={range}
-                  onChange={value => {
-                    if (value === "2011_2012" || value === "2010_2013") setRange(value);
-                  }}
-                />
-                <Select
-                  label="Species"
-                  placeholder="All species"
-                  data={speciesOptions.map(s => ({ value: s, label: s }))}
-                  value={species === "All" ? null : species}
-                  onChange={value => setSpecies(value ?? "All")}
-                  searchable
-                  clearable
-                />
-                <Stack gap={6}>
+                <Stack gap={40}>
                   <Group justify="space-between">
-                    <Text fw={500}>Time</Text>
-                    <Text size="sm" c="dimmed">
+                    <Text fs="bold" fw={500}>Time</Text>
+                    <Badge variant="light" color="blue">
                       {formatMonth(monthIndex)}
-                    </Text>
+                    </Badge>
                   </Group>
                   <Slider
                     value={monthIndex}
@@ -356,34 +336,24 @@ export default function OceanFlowMap() {
                     max={MONTH_COUNT - 1}
                     step={1}
                     marks={[
-                      { value: 0, label: "Start" },
-                      { value: MONTH_COUNT - 1, label: "End" }
+                      { value: 0, label: "Start"},
+                      { value: MONTH_COUNT - 1, label: "End"}
                     ]}
+                    styles={{
+                      markLabel: {
+                        color: "white",
+                        fontWeight: 600,
+                        fontSize: "12px"
+                      }
+                    }}
                   />
-                  <Group gap="sm">
+                  <Group gap="lg" p="center">
                     <Button size="xs" variant="light" onClick={() => setPlaying(p => !p)}>
                       {playing ? "Pause" : "Play"}
                     </Button>
-                    <Text size="xs" c="dimmed">
-                      Animates month +/-1 window for whale presence
-                    </Text>
                   </Group>
                 </Stack>
-                <Divider />
-                <Stack gap="xs">
-                  <Text fw={500}>Layers</Text>
-                  <Switch
-                    checked={showWhales}
-                    label="Whales"
-                    onChange={e => setShowWhales(e.currentTarget.checked)}
-                  />
-                  <Switch
-                    checked={showCurrents}
-                    label="Vertical flow (w)"
-                    onChange={e => setShowCurrents(e.currentTarget.checked)}
-                  />
-                </Stack>
-                <Divider />
+                <Divider c="white"/>
                 <Stack gap="xs">
                   <Text fw={500}>Bookmarks</Text>
                   <Group gap="xs">
@@ -415,7 +385,7 @@ export default function OceanFlowMap() {
             </Paper>
 
             <SimpleGrid cols={1} spacing="md">
-              <Paper withBorder p="md" radius="lg">
+              <Paper p="md" radius="lg">
                 <Stack gap="sm">
                   <Title order={5}>Seasonality (monthly presence)</Title>
                   <LineChart
@@ -427,7 +397,7 @@ export default function OceanFlowMap() {
                 </Stack>
               </Paper>
 
-              <Paper withBorder p="md" radius="lg">
+              <Paper p="md" radius="lg">
                 <Stack gap="sm">
                   <Title order={5}>Top species (current filters)</Title>
                   <BarChart
@@ -439,24 +409,31 @@ export default function OceanFlowMap() {
                 </Stack>
               </Paper>
             </SimpleGrid>
-          </Stack>
+            </Stack>
+            </Grid.Col>
 
-          <Paper
-            withBorder
-            radius="lg"
-            p="sm"
-            style={{
-              background: theme.other?.mapBg ?? "#0b1020",
-              height: "calc(100vh - 180px)",
-              minHeight: rem(500)
-            }}
-          >
-            <div
-              ref={mapContainerRef}
-              style={{ width: "100%", height: "100%", borderRadius: rem(12), overflow: "hidden" }}
-            />
-          </Paper>
-        </SimpleGrid>
+            <Grid.Col span={{ base: 12, md: 8 }}>
+              <Paper
+                radius="lg"
+                p="sm"
+                style={{
+                  background: theme.other?.mapBg ?? "#0b1020",
+                  height: "calc(100vh - 180px)",
+                  minHeight: rem(500)
+                }}
+              >
+                <div
+                  ref={mapContainerRef}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: rem(12),
+                    overflow: "hidden"
+                  }}
+                />
+              </Paper>
+            </Grid.Col>
+            </Grid>
       </AppShell.Main>
     </AppShell>
   );

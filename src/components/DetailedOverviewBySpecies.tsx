@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Paper, Stack, Text, Title, SimpleGrid, Card, Image, Button, Group, Slider, rem, ActionIcon } from "@mantine/core";
+import { Paper, Stack, Text, Title, SimpleGrid, Card, Image, Button, Group, Slider, rem, ActionIcon, Box } from "@mantine/core";
 import { LineChart } from "@mantine/charts";
 import * as maptilersdk from "@maptiler/sdk";
 import { fetchTemperature, fetchSalinity } from "../services/api";
@@ -583,11 +583,11 @@ function SpeciesDetailView({
   }, [whaleData, species, selectedMonth]);
 
   return (
-    <Paper withBorder p="md" radius="lg">
+    <Paper p="md" radius="lg">
       <Stack gap="md">
         {/* Species Navigation */}
         <Group justify="space-between" wrap="nowrap">
-          <Title order={4}>{species.commonName}</Title>
+          <Title order={2} c="white">{species.commonName}</Title>
           <Group gap="xs">
             {WHALE_SPECIES.map((s) => {
               // Only show color indicator for individual species (not "all")
@@ -621,10 +621,10 @@ function SpeciesDetailView({
         <SimpleGrid cols={{ base: 1, lg: 2 }} spacing="md">
           {/* Left: Charts */}
           <Stack gap="md">
-            <Paper withBorder p="md" radius="md">
+            <Paper p="md" radius="md">
               <Stack gap="xs">
                 <Group justify="space-between" align="center">
-                  <Title order={6}>Mean Temperature by Month (°C)</Title>
+                  <Title order={6} c="white">Mean Temperature by Month (°C)</Title>
                   <ActionIcon
                     variant={envDataType === "temperature" ? "filled" : "light"}
                     color={envDataType === "temperature" ? "orange" : "gray"}
@@ -639,6 +639,8 @@ function SpeciesDetailView({
                   h={250}
                   data={temperatureData}
                   dataKey="month"
+                  xAxisProps={{ label: { fill: "white" } as any }}
+                  yAxisProps={{ label: { fill: "white" } as any }}
                   series={[{ 
                     name: "temperature", 
                     color: "orange.6"
@@ -660,10 +662,10 @@ function SpeciesDetailView({
               </Stack>
             </Paper>
 
-            <Paper withBorder p="md" radius="md">
+            <Paper p="md" radius="md">
               <Stack gap="xs">
                 <Group justify="space-between" align="center">
-                  <Title order={6}>Mean Salinity by Month (PSU)</Title>
+                  <Title order={6} c="white">Mean Salinity by Month (PSU)</Title>
                   <ActionIcon
                     variant={envDataType === "salinity" ? "filled" : "light"}
                     color={envDataType === "salinity" ? "cyan" : "gray"}
@@ -702,25 +704,13 @@ function SpeciesDetailView({
 
           {/* Right: Map and Slider */}
           <Stack gap="md">
-            <Paper
-              withBorder
-              p="sm"
-              radius="md"
-              style={{ height: rem(450) }}
-            >
-              <div
-                ref={mapContainerRef}
-                style={{ width: "100%", height: "100%", borderRadius: rem(8), overflow: "hidden" }}
-              />
-            </Paper>
-
             {loadingEnvData && (
-              <Paper withBorder p="md" radius="md">
+              <Paper p="md" radius="md">
                 <Text size="sm" c="dimmed">Loading environmental data...</Text>
               </Paper>
             )}
 
-            <Paper withBorder p="md" radius="md">
+            <Paper p="md" radius="md">
               <Stack gap="sm">
                 <Group justify="space-between">
                   <Text fw={500} size="sm">Month</Text>
@@ -754,6 +744,17 @@ function SpeciesDetailView({
                 />
               </Stack>
             </Paper>
+
+            <Paper
+              p="sm"
+              radius="md"
+              style={{ height: rem(550) }}
+            >
+              <div
+                ref={mapContainerRef}
+                style={{ width: "100%", height: "100%", borderRadius: rem(8), overflow: "hidden" }}
+              />
+            </Paper>
           </Stack>
         </SimpleGrid>
       </Stack>
@@ -777,10 +778,10 @@ export default function DetailedOverviewBySpecies() {
   }
 
   return (
-    <Paper withBorder p="xl" radius="lg" style={{ background: "linear-gradient(135deg, #1e3a5f 0%, #2d5a8c 100%)" }}>
+    <Paper p="xl" radius="lg" c="siteBg">
       <Stack gap="xl" align="center">
         <Stack gap="xs" align="center">
-          <Title order={3} style={{ color: "white", textAlign: "center" }}>
+          <Title order={1} style={{ color: "white", textAlign: "center"}}>
             Select the species you want to track
           </Title>
         </Stack>
@@ -841,9 +842,17 @@ export default function DetailedOverviewBySpecies() {
           })}
         </SimpleGrid>
 
-        <Text size="sm" c="rgba(255,255,255,0.8)" ta="center" maw={800} px="md">
-        Migrations of species belonging to the infraorder Cetacea are among the most extensive and complex in the animal kingdom. Many whale and dolphin species undertake seasonal migrations between feeding grounds and breeding areas, often covering distances of several thousand kilometers. These movements are closely linked to environmental drivers such as sea surface temperature, prey availability, and large-scale ocean circulation. Cetaceans typically feed in colder, high-latitude waters where biological productivity is high, and migrate to warmer, lower-latitude regions for breeding and calving. Migration patterns vary significantly across species and populations and can be influenced by climate variability and long-term environmental change, making cetaceans sensitive indicators of ocean ecosystem dynamics.
-        </Text>
+        <Box w="100%">
+          <Text
+            size="sm"
+            c="rgba(255,255,255,0.8)"
+            ta="center"
+            px="md"
+          >
+            Migrations of species belonging to the infraorder Cetacea are among the most extensive and complex in the animal kingdom. Many whale and dolphin species undertake seasonal migrations between feeding grounds and breeding areas, often covering distances of several thousand kilometers. These movements are closely linked to environmental drivers such as sea surface temperature, prey availability, and large-scale ocean circulation. Cetaceans typically feed in colder, high-latitude waters where biological productivity is high, and migrate to warmer, lower-latitude regions for breeding and calving. Migration patterns vary significantly across species and populations and can be influenced by climate variability and long-term environmental change, making cetaceans sensitive indicators of ocean ecosystem dynamics.
+          </Text>
+        </Box>
+
 
         <Text size="xs" c="rgba(255,255,255,0.6)" ta="center" maw={800} px="md">
           *na vizualizaciji so lokacije kitov označene na območjih, kjer je bila vrsta opažena
