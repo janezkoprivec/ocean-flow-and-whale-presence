@@ -387,7 +387,7 @@ export default function WhaleGuessingGame() {
             }}
           >
             <Text size="sm">
-              Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Click on the map, where you think the whales and dolphins are located. You have 5 guesses to find the whales and dolphins.
             </Text>
           </Paper>
         )}
