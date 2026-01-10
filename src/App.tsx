@@ -15,7 +15,6 @@ import {
 import { theme } from "./theme";
 import OceanFlowMap from "./components/OceanFlowMap";
 import WhaleGuessingGame from "./components/WhaleGuessingGame";
-import WhalesSalinityTemp from "./components/WhalesSalinityTemp";
 import StatsBySpecies from "./components/StatsBySpecies";
 import WhalePresenceGame from "./components/WhalePresence";
 import DetailedOverviewBySpecies from "./components/DetailedOverviewBySpecies";
@@ -24,7 +23,6 @@ const COMPONENTS = [
   { label: "Ocean Flow Map", component: OceanFlowMap },
   { label: "Detailed Overview", component: DetailedOverviewBySpecies },
   { label: "Whale Guessing Game", component: WhaleGuessingGame },
-  { label: "Salinity & Temperature", component: WhalesSalinityTemp },
   { label: "Stats by Species", component: StatsBySpecies },
   { label: "Whale Presence", component: WhalePresenceGame }
 ];
