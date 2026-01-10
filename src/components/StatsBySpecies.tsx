@@ -165,6 +165,7 @@ export default function StatsBySpecies() {
       </Paper>
     );
   }
+  const activeCount = speciesData[activeIndex]?.count_2011 ?? 0;
 
   return (
     <Group gap="lg" align="stretch" style={{ height: "calc(100vh - 180px)", minHeight: rem(500) }} wrap="nowrap">
@@ -181,7 +182,7 @@ export default function StatsBySpecies() {
           overflow: "hidden"
         }}
       >
-        <Title order={4} mb="md">
+        <Title order={2} mb="md" c="white">
           Species Statistics
         </Title>
         <ScrollArea
@@ -230,13 +231,13 @@ export default function StatsBySpecies() {
 
                   {/* Text Content */}
                   <Stack gap={4} style={{ flex: 1 }}>
-                    <Title order={4} fw={700} style={{ lineHeight: 1.2 }}>
+                    <Title order={4} fw={700} style={{ lineHeight: 1.2 }} c="white">
                       {species.species}
                     </Title>
-                    <Text size="sm" fs="italic" c="dimmed" style={{ lineHeight: 1.3 }}>
+                    <Text size="sm" fs="italic" c="white" style={{ lineHeight: 1.3 }}>
                       {species.scientific_name}
                     </Text>
-                    <Text size="sm" style={{ lineHeight: 1.5, marginTop: rem(4) }}>
+                    <Text size="sm" style={{ lineHeight: 1.5, marginTop: rem(4) }} c="white">
                       {species.description}
                     </Text>
                   </Stack>
@@ -261,22 +262,31 @@ export default function StatsBySpecies() {
           overflow: "hidden"
         }}
       >
+        <Stack align="center" gap="xs" style={{ width: "100%", height: "100%" }}>
         <Box
           style={{
             width: "100%",
             height: "100%",
-            display: "flex",
+            display: "column",
             alignItems: "center",
             justifyContent: "center",
             position: "relative"
           }}
         >
+            <Text size={rem(32)} fs="bold" c="white" ta="center">
+              {activeCount}
+            </Text>
+            <Text size="sm" c="white" ta="center">
+              sightings in 2011
+            </Text>
           <Box
             style={{
               width: "90%",
               height: "90%",
               maxWidth: rem(500),
               maxHeight: rem(500),
+              alignContent: "center",
+              justifyContent: "center",
               transition: "transform 0.5s ease",
               transform: `rotate(${chartRotation}deg)`
             }}
@@ -303,6 +313,7 @@ export default function StatsBySpecies() {
             </ResponsiveContainer>
           </Box>
         </Box>
+        </Stack>
       </Paper>
     </Group>
   );

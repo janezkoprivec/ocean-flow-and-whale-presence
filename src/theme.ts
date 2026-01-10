@@ -20,7 +20,8 @@ export const theme = createTheme({
     ]
   },
   other: {
-    mapBg: "#0b1020",
+    // mapBg: "#0b1020",
+    mapBg: "#3a5e7c",
     siteBg: "#012a4a" // Added site background color
   }
 });

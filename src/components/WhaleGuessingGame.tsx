@@ -383,10 +383,11 @@ export default function WhaleGuessingGame() {
               left: rem(16),
               right: rem(16),
               zIndex: 100,
-              backgroundColor: "var(--mantine-color-dark-7)"
+              backgroundColor: "var(--mantine-color-dark-7)",
+              opacity: 0.7
             }}
           >
-            <Text size="sm">
+            <Text size="sm" c="white" ta="center">
             Click on the map, where you think the whales and dolphins are located. You have 5 guesses to find the whales and dolphins.
             </Text>
           </Paper>
@@ -412,7 +413,7 @@ export default function WhaleGuessingGame() {
             </Title>
             <Box style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Text ta="center" size="md">
-                Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua enim ad minim veniam quis nostrud exercitation ullamco laboris.
+              Whales and dolphins are commonly present in European waters and the North Atlantic due to favorable oceanographic conditions, including suitable temperatures, salinity patterns, and high prey availability. These regions support productive ecosystems shaped by currents and seasonal changes, making them important feeding, migration, and breeding areas for many cetacean species.
               </Text>
             </Box>
             <Box style={{ marginTop: "auto", paddingTop: rem(16) }}>

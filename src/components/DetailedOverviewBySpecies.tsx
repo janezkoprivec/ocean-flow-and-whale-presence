@@ -28,7 +28,7 @@ const WHALE_SPECIES = [
   },
   {
     id: "all-species",
-    scientificName: "all",
+    scientificName: "Cetacea",
     commonName: "All Three Species",
     description: "View all three whale species together on the map.",
     color: "#4aa8ff" // Default color (not used when showing all)
@@ -781,7 +781,7 @@ export default function DetailedOverviewBySpecies() {
       <Stack gap="xl" align="center">
         <Stack gap="xs" align="center">
           <Title order={3} style={{ color: "white", textAlign: "center" }}>
-            Izberi vrsto ki jo želiš trackat
+            Select the species you want to track
           </Title>
         </Stack>
 
@@ -813,7 +813,7 @@ export default function DetailedOverviewBySpecies() {
 
                 <Stack gap="xs" mt="md">
                   <Group gap="xs" align="center">
-                    <Text fw={600} size="lg">
+                    <Text fw={600} size="lg" c="white">
                       {species.commonName}
                     </Text>
                     {showColor && (
@@ -829,10 +829,10 @@ export default function DetailedOverviewBySpecies() {
                       />
                     )}
                   </Group>
-                  <Text size="sm" c="dimmed">
+                  <Text size="sm" c="white" fs="italic">
                     {species.scientificName}
                   </Text>
-                  <Text size="sm" lineClamp={3}>
+                  <Text size="sm" lineClamp={3} c="white">
                     {species.description}
                   </Text>
                 </Stack>
@@ -842,9 +842,7 @@ export default function DetailedOverviewBySpecies() {
         </SimpleGrid>
 
         <Text size="sm" c="rgba(255,255,255,0.8)" ta="center" maw={800} px="md">
-          Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum 
-          Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum 
-          Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum
+        Migrations of species belonging to the infraorder Cetacea are among the most extensive and complex in the animal kingdom. Many whale and dolphin species undertake seasonal migrations between feeding grounds and breeding areas, often covering distances of several thousand kilometers. These movements are closely linked to environmental drivers such as sea surface temperature, prey availability, and large-scale ocean circulation. Cetaceans typically feed in colder, high-latitude waters where biological productivity is high, and migrate to warmer, lower-latitude regions for breeding and calving. Migration patterns vary significantly across species and populations and can be influenced by climate variability and long-term environmental change, making cetaceans sensitive indicators of ocean ecosystem dynamics.
         </Text>
 
         <Text size="xs" c="rgba(255,255,255,0.6)" ta="center" maw={800} px="md">
