@@ -239,7 +239,11 @@ export default function App() {
               animation: "fadeIn 0.4s ease-in-out"
             }}
           >
-            <CurrentComponent />
+            {activeStep === 2 ? (
+              <WhaleGuessingGame key={activeStep} />
+            ) : (
+              <CurrentComponent />
+            )}
           </Box>
         </Stack>
       </Container>
