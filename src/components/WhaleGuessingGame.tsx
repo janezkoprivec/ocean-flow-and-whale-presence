@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
+  Grid,
   Paper,
   rem,
-  SimpleGrid,
+  Image,
   Stack,
   Text,
   Title
@@ -100,19 +101,21 @@ export default function WhaleGuessingGame() {
           const dataUri = `data:image/svg+xml;charset=utf-8,${encodedSvg}`;
           
           // Create image and load it
-          const img = new Image();
+          const img = new window.Image();
           img.crossOrigin = "anonymous";
+
           img.onload = () => {
-            if (mapRef.current && mapRef.current.hasImage) {
-              if (!mapRef.current.hasImage("whale-icon")) {
-                mapRef.current.addImage("whale-icon", img);
-              }
+            if (mapRef.current && !mapRef.current.hasImage("whale-icon")) {
+              mapRef.current.addImage("whale-icon", img);
             }
           };
+
           img.onerror = (error) => {
             console.error("Failed to load whale icon:", error);
           };
+
           img.src = dataUri;
+
         } catch (error) {
           console.error("Failed to create whale icon:", error);
         }
@@ -321,23 +324,19 @@ export default function WhaleGuessingGame() {
   };
 
   return (
-    <SimpleGrid
-      cols={gameComplete ? 2 : 1}
-      spacing="md"
-      style={{ width: "100%" }}
-    >
-      <Paper
-        withBorder
-        radius="lg"
-        p="sm"
-        style={{
-          background: theme.other?.mapBg ?? "#0b1020",
-          height: "calc(100vh - 180px)",
-          minHeight: rem(500),
-          position: "relative",
-          transition: "width 0.5s ease"
-        }}
-      >
+    <Grid gutter="md">
+      <Grid.Col span={gameComplete ? 8 : 12}>
+        <Paper
+          withBorder
+          radius="lg"
+          p="sm"
+          style={{
+            background: theme.other?.mapBg ?? "#0b1020",
+            height: "calc(100vh - 180px)",
+            minHeight: rem(500),
+            position: "relative"
+          }}
+        >
         <div
           ref={mapContainerRef}
           style={{
@@ -393,37 +392,69 @@ export default function WhaleGuessingGame() {
           </Paper>
         )}
       </Paper>
+      </Grid.Col>
 
       {/* Success Panel */}
       {gameComplete && (
-        <Paper
-          withBorder
-          p="lg"
-          radius="lg"
+  <Grid.Col span={4}>
+    <Paper
+      withBorder
+      p="lg"
+      radius="lg"
+      style={{
+        height: "calc(100vh - 180px)",
+        minHeight: rem(500),
+        display: "flex",
+        flexDirection: "column"
+      }}
+    >
+      {/* content unchanged */}
+ 
+      <Stack gap="md" style={{ height: "100%", alignContent:"center"}}>
+        <Title
+          order={2}
+          ta="center"
+          style={{ paddingTop: rem(24), paddingBottom: rem(8), color: "white" }}
+        >
+          Bravo!
+        </Title>
+        <Image
+          src="/dol.jpg"
+          alt="Whale illustration"
+          radius="md"
+          fit="contain"
+          w="100%"
+          mx="auto"
           style={{
-            height: "calc(100vh - 180px)",
-            minHeight: rem(500),
+            maxHeight: rem(220),
+            borderRadius: rem(32), 
+            overflow: "hidden" 
+          }}
+        />
+
+
+        <Box
+          style={{
+            flex: 1,
             display: "flex",
-            flexDirection: "column"
+            alignItems: "center",
+            justifyContent: "center",
+            color: "white"
           }}
         >
-          <Stack gap="md" style={{ height: "100%" }}>
-            <Title order={2} ta="center" style={{ paddingTop: rem(24), paddingBottom: rem(16) }}>
-              Bravo!
-            </Title>
-            <Box style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Text ta="center" size="md">
-              Whales and dolphins are commonly present in European waters and the North Atlantic due to favorable oceanographic conditions, including suitable temperatures, salinity patterns, and high prey availability. These regions support productive ecosystems shaped by currents and seasonal changes, making them important feeding, migration, and breeding areas for many cetacean species.
-              </Text>
-            </Box>
-            <Box style={{ marginTop: "auto", paddingTop: rem(16) }}>
+          <Text ta="center" size="md">
+          Whales and dolphins are commonly present in European waters and the North Atlantic due to favorable oceanographic conditions, including suitable temperatures, salinity patterns, and high prey availability.
+          </Text>
+        </Box>
+            <Box style={{ marginTop: "auto", paddingTop: rem(16), color:"white" }}>
               <Button onClick={handleGuessAgain} fullWidth>
                 Guess again
               </Button>
             </Box>
           </Stack>
         </Paper>
+  </Grid.Col>
       )}
-    </SimpleGrid>
+      </Grid>
   );
 }

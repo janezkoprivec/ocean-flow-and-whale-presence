@@ -17,7 +17,15 @@ import {
   Title
 } from "@mantine/core";
 
-import { LineChart, BarChart } from "@mantine/charts";
+import { LineChart } from "@mantine/charts";
+import {
+  RadialBarChart,
+  RadialBar,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  Cell
+} from "recharts";
 import * as maptilersdk from "@maptiler/sdk";
 import { theme } from "../theme";
 
@@ -246,6 +254,16 @@ export default function OceanFlowMap() {
       .slice(0, 10);
   }, [filteredWhales]);
 
+  const radialSpeciesData = useMemo(() => {
+    return speciesChart.map((d, index) => ({
+      name: d.species,
+      value: d.count,
+      fill: `hsl(${(index * 45) % 360}, 70%, 60%)`
+    }));
+  }, [speciesChart]);
+  
+  
+
   useEffect(() => {
     if (!mapReadyRef.current || !mapRef.current || !mapRef.current.getSource("whales")) return;
     const map = mapRef.current;
@@ -324,8 +342,8 @@ export default function OceanFlowMap() {
                 </Group>
                 <Stack gap={40}>
                   <Group justify="space-between">
-                    <Text fs="bold" fw={500}>Time</Text>
-                    <Badge variant="light" color="blue">
+                    <Text fs="bold" fw={1000}>Currently displayed month:</Text>
+                    <Badge variant="light" color="blue" size="bg" p={5} pl={10} pr={10}>
                       {formatMonth(monthIndex)}
                     </Badge>
                   </Group>
@@ -347,15 +365,15 @@ export default function OceanFlowMap() {
                       }
                     }}
                   />
-                  <Group gap="lg" p="center">
-                    <Button size="xs" variant="light" onClick={() => setPlaying(p => !p)}>
+                  <Group gap="lg" justify="center">
+                    <Button size="md" variant="light" onClick={() => setPlaying(p => !p)}>
                       {playing ? "Pause" : "Play"}
                     </Button>
                   </Group>
                 </Stack>
-                <Divider c="white"/>
+                <Divider />
                 <Stack gap="xs">
-                  <Text fw={500}>Bookmarks</Text>
+                  <Text fw={500} fs={"bold"}>Bookmarks</Text>
                   <Group gap="xs">
                     {Object.entries(bookmarks).map(([key, val]) => (
                       <Button
@@ -377,38 +395,19 @@ export default function OceanFlowMap() {
                   </Group>
                 </Stack>
                 <Divider />
-                <Text size="sm" c="dimmed">
-                  OBIS observations are presence records (not tracked individuals). w &gt; 0 indicates
+                <Text size="sm" c="white">
+                  OBIS{" "}
+                  <Text component="span" fs="italic">
+                    Cetacea
+                  </Text>{" "}
+                  are presence records (not tracked individuals). w &gt; 0 indicates
                   upwelling, w &lt; 0 downwelling. Currents data covers 2011–2012.
                 </Text>
+
               </Stack>
             </Paper>
 
-            <SimpleGrid cols={1} spacing="md">
-              <Paper p="md" radius="lg">
-                <Stack gap="sm">
-                  <Title order={5}>Seasonality (monthly presence)</Title>
-                  <LineChart
-                    h={220}
-                    data={seasonality}
-                    dataKey="label"
-                    series={[{ name: "count", color: "cyan" }]}
-                  />
-                </Stack>
-              </Paper>
-
-              <Paper p="md" radius="lg">
-                <Stack gap="sm">
-                  <Title order={5}>Top species (current filters)</Title>
-                  <BarChart
-                    h={240}
-                    data={speciesChart}
-                    dataKey="species"
-                    series={[{ name: "count", color: "blue.4" }]}
-                  />
-                </Stack>
-              </Paper>
-            </SimpleGrid>
+          
             </Stack>
             </Grid.Col>
 
@@ -432,6 +431,86 @@ export default function OceanFlowMap() {
                   }}
                 />
               </Paper>
+            </Grid.Col>
+
+            <Grid.Col span={{ base: 12 }}>
+              <Grid gutter="md">
+                <Grid.Col span={{ base: 12, md: 6 }}>
+                  <Paper p="md" radius="lg">
+                    <Stack gap="sm">
+                      <Title order={5} c="white">
+                        Seasonality (monthly presence)
+                      </Title>
+                      <LineChart
+                        h={220}
+                        data={seasonality}
+                        dataKey="label"
+                        series={[{ name: "count", color: "cyan" }]}
+                      />
+                    </Stack>
+                  </Paper>
+                </Grid.Col>
+
+                <Grid.Col span={{ base: 12, md: 6 }}>
+                  <Paper p="md" radius="lg">
+                    <Stack gap="sm">
+                      <Title order={5} c="white">
+                        Top species (current filters)
+                      </Title>
+                      <div style={{ width: "100%", height: 260 }}>
+                        <ResponsiveContainer>
+                          <RadialBarChart
+                            cx="50%"
+                            cy="50%"
+                            innerRadius="30%"
+                            outerRadius="90%"
+                            startAngle={90}
+                            endAngle={-270}
+                            data={radialSpeciesData}
+                          >
+                            <RadialBar
+                              dataKey="value"
+                              cornerRadius={8}
+                              background
+                            >
+                              {radialSpeciesData.map((_, index) => (
+                                <Cell
+                                  key={index}
+                                  fill={`hsl(${(index * 45) % 360}, 70%, 60%)`}
+                                />
+                              ))}
+                            </RadialBar>
+
+                            <Tooltip
+                              contentStyle={{
+                                backgroundColor: "#0b1020",
+                                border: "1px solid #2c4a6a",
+                                borderRadius: 8,
+                                color: "white"
+                              }}
+                              formatter={(value) => [
+                                value ?? 0,
+                                "Occurrences"
+                              ]}
+                            />
+
+                            <Legend
+                              layout="vertical"
+                              verticalAlign="middle"
+                              align="right"
+                              wrapperStyle={{
+                                color: "white",
+                                fontSize: 12
+                              }}
+                            />
+                          </RadialBarChart>
+                        </ResponsiveContainer>
+                      </div>
+              
+                    </Stack>
+                  </Paper>
+                </Grid.Col>
+              </Grid>
             </Grid.Col>
             </Grid>
       </AppShell.Main>
