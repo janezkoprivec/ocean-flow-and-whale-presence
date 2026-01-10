@@ -18,7 +18,6 @@ import WhaleGuessingGame from "./components/WhaleGuessingGame";
 import WhalesSalinityTemp from "./components/WhalesSalinityTemp";
 import StatsBySpecies from "./components/StatsBySpecies";
 import WhalePresenceGame from "./components/WhalePresence";
-import ExploreTheOceans from "./components/ExploreTheOceans";
 import DetailedOverviewBySpecies from "./components/DetailedOverviewBySpecies";
 
 const COMPONENTS = [
@@ -27,8 +26,7 @@ const COMPONENTS = [
   { label: "Whale Guessing Game", component: WhaleGuessingGame },
   { label: "Salinity & Temperature", component: WhalesSalinityTemp },
   { label: "Stats by Species", component: StatsBySpecies },
-  { label: "Whale Presence", component: WhalePresenceGame },
-  { label: "Explore the Oceans", component: ExploreTheOceans }
+  { label: "Whale Presence", component: WhalePresenceGame }
 ];
 
 export default function App() {

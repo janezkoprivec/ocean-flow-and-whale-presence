@@ -395,17 +395,33 @@ export default function WhalePresence() {
   return (
     <Paper withBorder p="md" radius="lg">
       <Stack gap="md">
-        <Title order={4}>Whale Presence</Title>
-        <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md">
-          {/* Left side: Controls */}
-          <Stack gap="md">
-            <Select
+        <Title order={2} c={"white"}>Whale Presence</Title>
+        <Stack gap="md">
+          {/* Row 1: Controls in one line */}
+          <Group grow align="flex-end" gap="md">
+          <Select
               label="Region"
+              styles={{
+                label: { color: "white" },
+                input: {
+                  color: "white",
+                  borderColor: "white",
+                  backgroundColor: "transparent"
+                },
+                dropdown: {
+                  backgroundColor: "#0b1020",
+                  borderColor: "white"
+                },
+                option: {
+                  color: "white"
+                }
+              }}
               placeholder="Select a region"
               data={["Europe", "North Atlantic"]}
               value={selectedRegion}
-              onChange={(value) => setSelectedRegion(value)}
+              onChange={setSelectedRegion}
             />
+
             <MultiSelect
               label="Species"
               placeholder={selectedRegion ? "Select species" : "Select a region first"}
@@ -413,7 +429,7 @@ export default function WhalePresence() {
                 const count = speciesCounts.get(species) || 0;
                 return {
                   value: species,
-                  label: `${species} (${count} ${count === 1 ? 'occurrence' : 'occurrences'})`
+                  label: `${species} (${count} ${count === 1 ? "occurrence" : "occurrences"})`
                 };
               })}
               value={selectedSpecies}
@@ -421,6 +437,59 @@ export default function WhalePresence() {
               disabled={!selectedRegion || availableSpecies.length === 0}
               searchable
               clearable
+
+              styles={{
+                /* Label */
+                label: {
+                  color: "white",
+                  fontWeight: 500
+                },
+
+                /* Input wrapper */
+                input: {
+                  backgroundColor: "transparent",
+                  borderColor: "white",
+
+                  "&:hover": {
+                    borderColor: "#4aa8ff"
+                  },
+                  "&:focus-within": {
+                    borderColor: "#4aa8ff"
+                  }
+                },
+
+                /* Actual text + placeholder */
+                inputField: {
+                  color: "white",
+
+                  "::placeholder": {
+                    color: "rgba(255,255,255,0.55)"
+                  }
+                },
+
+                /* Dropdown */
+                dropdown: {
+                  backgroundColor: "#0b1020",
+                  borderColor: "white"
+                },
+
+                /* Options */
+                option: {
+                  color: "white",
+
+                  "&[data-hovered]": {
+                    backgroundColor: "rgba(74,168,255,0.15)"
+                  }
+                },
+
+                /* Selected pills */
+                pill: {
+                  backgroundColor: "rgba(74,168,255,0.25)",
+                  color: "white",
+                  border: "1px solid rgba(255,255,255,0.4)"
+                }
+              }}
+
               renderOption={({ option }) => {
                 const color = speciesColorMap.get(option.value) || "#4aa8ff";
                 return (
@@ -431,45 +500,30 @@ export default function WhalePresence() {
                         height: 12,
                         borderRadius: "50%",
                         backgroundColor: color,
-                        flexShrink: 0,
-                        border: "1px solid rgba(255, 255, 255, 0.3)"
+                        border: "1px solid rgba(255,255,255,0.3)"
                       }}
                     />
-                    <Text>{option.label}</Text>
+                    <Text c="white">{option.label}</Text>
                   </Group>
                 );
               }}
             />
-            {selectedSpecies.length > 0 && (
-              <Stack gap="xs">
-                <Text size="sm" fw={500}>Selected Species:</Text>
-                <Group gap="xs">
-                  {selectedSpecies.map(species => (
-                    <Badge
-                      key={species}
-                      color={speciesColorMap.get(species) || "#4aa8ff"}
-                      variant="filled"
-                      style={{ backgroundColor: speciesColorMap.get(species) || "#4aa8ff" }}
-                    >
-                      {species}
-                    </Badge>
-                  ))}
-                </Group>
-              </Stack>
-            )}
-          </Stack>
 
-          {/* Right side: Map */}
+
+          </Group>
+
+          {/* Row 2: Big map */}
           <div
             ref={mapContainerRef}
             style={{
               width: "100%",
-              height: "400px",
-              borderRadius: "8px",
+              height: "60vh",
+              borderRadius: 8,
               overflow: "hidden"
             }}
           />
-        </SimpleGrid>
+        </Stack>
+
       </Stack>
 
     </Paper>
