@@ -471,7 +471,7 @@ export default function OceanFlowMap() {
                             <RadialBar
                               dataKey="value"
                               cornerRadius={8}
-                              background
+                              background={{ fill: "#3a5e7d" }}
                             >
                               {radialSpeciesData.map((_, index) => (
                                 <Cell
