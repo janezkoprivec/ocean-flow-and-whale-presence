@@ -11,6 +11,12 @@ import {
   Title
 } from "@mantine/core";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+// Load all species images eagerly
+const speciesImages = import.meta.glob(
+  "../assets/pics/*.{jpg,png,webp}",
+  { eager: true, import: "default" }
+) as Record<string, string>;
+
 
 type SpeciesStats = {
   species: string;
@@ -26,16 +32,28 @@ type ChartDataItem = {
   index: number;
 };
 
-function getSpeciesImage(scientificName: string) {
-  const fileName = scientificName
+function normalizeName(name: string) {
+  return name
     .toLowerCase()
-    .replace(/\s+/g, "_");
-
-  return new URL(
-    `../assets/pics/${fileName}.jpg`,
-    import.meta.url
-  ).href;
+    .normalize("NFD")                 // remove accents
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\(.*?\)/g, "")          // remove parentheses
+    .replace(/[^a-z\s]/g, "")         // remove punctuation
+    .trim()
+    .replace(/\s+/g, "_");             // spaces → underscores
 }
+
+function getSpeciesImage(scientificName: string) {
+  const normalized = normalizeName(scientificName);
+
+  const match = Object.entries(speciesImages).find(([path]) =>
+    normalizeName(path).includes(normalized)
+  );
+
+  return match ? match[1] : null;
+}
+
+
 
 
 export default function StatsBySpecies() {
@@ -230,22 +248,30 @@ export default function StatsBySpecies() {
                       alignSelf: "stretch"
                     }}
                   >
-                    <img
-                      src={getSpeciesImage(species.scientific_name)}
-                      alt={species.scientific_name}
-                      style={{
-                        width: "100%",
-                        height: rem(80),
-                        objectFit: "contain",
-                        borderRadius: rem(6)
-                      }}
-                      onError={(e) => {
-                        // Optional fallback if image is missing
-                        (e.currentTarget as HTMLImageElement).src = whaleIconDataUri;
-                      }}
-                    />
-
+                    {getSpeciesImage(species.scientific_name) ? (
+                      <img
+                        src={getSpeciesImage(species.scientific_name)!}
+                        alt={species.scientific_name}
+                        style={{
+                          width: "100%",
+                          height: rem(80),
+                          objectFit: "contain",
+                          borderRadius: rem(6)
+                        }}
+                      />
+                    ) : (
+                      <img
+                        src={whaleIconDataUri}
+                        alt="Fallback whale"
+                        style={{
+                          width: "100%",
+                          height: rem(80),
+                          objectFit: "contain"
+                        }}
+                      />
+                    )}
                   </Box>
+
 
                   {/* Text Content */}
                   <Stack gap={4} style={{ flex: 1 }}>
