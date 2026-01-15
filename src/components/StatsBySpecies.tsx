@@ -26,6 +26,18 @@ type ChartDataItem = {
   index: number;
 };
 
+function getSpeciesImage(scientificName: string) {
+  const fileName = scientificName
+    .toLowerCase()
+    .replace(/\s+/g, "_");
+
+  return new URL(
+    `../assets/pics/${fileName}.jpg`,
+    import.meta.url
+  ).href;
+}
+
+
 export default function StatsBySpecies() {
   const [speciesData, setSpeciesData] = useState<SpeciesStats[] | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -219,14 +231,20 @@ export default function StatsBySpecies() {
                     }}
                   >
                     <img
-                      src={whaleIconDataUri}
-                      alt="Whale"
+                      src={getSpeciesImage(species.scientific_name)}
+                      alt={species.scientific_name}
                       style={{
                         width: "100%",
-                        height: "auto",
-                        objectFit: "contain"
+                        height: rem(80),
+                        objectFit: "contain",
+                        borderRadius: rem(6)
+                      }}
+                      onError={(e) => {
+                        // Optional fallback if image is missing
+                        (e.currentTarget as HTMLImageElement).src = whaleIconDataUri;
                       }}
                     />
+
                   </Box>
 
                   {/* Text Content */}
