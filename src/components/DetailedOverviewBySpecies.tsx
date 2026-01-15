@@ -161,7 +161,7 @@ function SpeciesDetailView({
           source: "whale-occurrences",
           paint: {
             "circle-radius": 6,
-            "circle-color": ["get", "speciesColor"],
+            "circle-color": ["get", "color"],
             "circle-stroke-color": "#fff",
             "circle-stroke-width": 1.5,
             "circle-opacity": 0.8
@@ -472,7 +472,7 @@ function SpeciesDetailView({
         type: "Feature",
         geometry: { type: "Point", coordinates: [occ.lon, occ.lat] },
         properties: {
-          speciesColor: occ.speciesName ? getSpeciesColor(occ.speciesName) : "#4aa8ff"
+          color: envDataType === "temperature" ? "#ff8c00" : "#1e90ff"
         }
       }))
     };
