@@ -635,30 +635,32 @@ function SpeciesDetailView({
                     🗺️
                   </ActionIcon>
                 </Group>
-                <LineChart
-                  h={250}
-                  data={temperatureData}
-                  dataKey="month"
-                  xAxisProps={{ label: { fill: "white" } as any }}
-                  yAxisProps={{ label: { fill: "white" } as any }}
-                  series={[{ 
-                    name: "temperature", 
-                    color: "orange.6"
-                  }]}
-                  tickLine="y"
-                  referenceLines={[
-                    {
-                      x: MONTH_LABELS[selectedMonth],
-                      color: "red",
-                      label: "Current",
-                      strokeDasharray: "5 5"
-                    }
-                  ]}
-                  curveType="natural"
-                  withDots
-                  dotProps={{ r: 4 }}
-                  activeDotProps={{ r: 6 }}
-                />
+                <Box bg="#C8D8E5" style={{ borderRadius: rem(8), padding: rem(8) }}>
+                  <LineChart
+                    h={250}
+                    data={temperatureData}
+                    dataKey="month"
+                    xAxisProps={{ label: { fill: "white" } as any }}
+                    yAxisProps={{ label: { fill: "white" } as any }}
+                    series={[{ 
+                      name: "temperature", 
+                      color: "orange.6"
+                    }]}
+                    tickLine="y"
+                    referenceLines={[
+                      {
+                        x: MONTH_LABELS[selectedMonth],
+                        color: "red",
+                        label: "Current",
+                        strokeDasharray: "5 5"
+                      }
+                    ]}
+                    curveType="natural"
+                    withDots
+                    dotProps={{ r: 4 }}
+                    activeDotProps={{ r: 6 }}
+                  />
+                </Box>
               </Stack>
             </Paper>
 
@@ -676,28 +678,30 @@ function SpeciesDetailView({
                     🗺️
                   </ActionIcon>
                 </Group>
-                <LineChart
-                  h={250}
-                  data={salinityData}
-                  dataKey="month"
-                  series={[{ 
-                    name: "salinity", 
-                    color: "cyan.6"
-                  }]}
-                  tickLine="y"
-                  referenceLines={[
-                    {
-                      x: MONTH_LABELS[selectedMonth],
-                      color: "red",
-                      label: "Current",
-                      strokeDasharray: "5 5"
-                    }
-                  ]}
-                  curveType="natural"
-                  withDots
-                  dotProps={{ r: 4 }}
-                  activeDotProps={{ r: 6 }}
-                />
+                <Box bg="#C8D8E5" style={{ borderRadius: rem(8), padding: rem(8) }}>
+                  <LineChart
+                    h={250}
+                    data={salinityData}
+                    dataKey="month"
+                    series={[{ 
+                      name: "salinity", 
+                      color: "cyan.6"
+                    }]}
+                    tickLine="y"
+                    referenceLines={[
+                      {
+                        x: MONTH_LABELS[selectedMonth],
+                        color: "red",
+                        label: "Current",
+                        strokeDasharray: "5 5"
+                      }
+                    ]}
+                    curveType="natural"
+                    withDots
+                    dotProps={{ r: 4 }}
+                    activeDotProps={{ r: 6 }}
+                  />
+                </Box>
               </Stack>
             </Paper>
           </Stack>
@@ -713,7 +717,7 @@ function SpeciesDetailView({
             <Paper p="md" radius="md">
               <Stack gap="sm">
                 <Group justify="space-between">
-                  <Text fw={500} size="sm">Month</Text>
+                  <Text fw={500} size="sm" c="white">Month</Text>
                   <Group gap="xs">
                     <ActionIcon
                       variant="light"
@@ -722,7 +726,7 @@ function SpeciesDetailView({
                     >
                       ◀
                     </ActionIcon>
-                    <Text size="sm" c="dimmed" style={{ minWidth: "80px", textAlign: "center" }}>
+                    <Text size="sm" c="white" style={{ minWidth: "80px", textAlign: "center" }}>
                       {MONTH_LABELS[selectedMonth]} 2011
                     </Text>
                     <ActionIcon
@@ -741,6 +745,11 @@ function SpeciesDetailView({
                   max={11}
                   step={1}
                   marks={MONTHS.map((_, idx) => ({ value: idx, label: idx % 3 === 0 ? MONTH_LABELS[idx] : "" }))}
+                  styles={{
+                    markLabel: {
+                      color: "white"
+                    }
+                  }}
                 />
               </Stack>
             </Paper>

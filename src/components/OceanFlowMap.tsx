@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AppShell,
   Badge,
+  Box,
   Button,
   Divider,
   Group,
@@ -441,12 +442,14 @@ export default function OceanFlowMap() {
                       <Title order={5} c="white">
                         Seasonality (monthly presence)
                       </Title>
-                      <LineChart
-                        h={220}
-                        data={seasonality}
-                        dataKey="label"
-                        series={[{ name: "count", color: "cyan" }]}
-                      />
+                      <Box bg="#C8D8E5" style={{ borderRadius: rem(8), padding: rem(8) }}>
+                        <LineChart
+                          h={220}
+                          data={seasonality}
+                          dataKey="label"
+                          series={[{ name: "count", color: "cyan" }]}
+                        />
+                      </Box>
                     </Stack>
                   </Paper>
                 </Grid.Col>
